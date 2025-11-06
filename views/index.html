@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прибор Автоматика | Авторизация</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="glass-background"></div>
+    
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+    
+    <div class="auth-container">
+        <div class="logo">
+            <div class="logo-icon">ПА</div>
+            <div class="logo-text">Прибор Автоматика</div>
+        </div>
+        
+        <div class="form-tabs">
+            <button class="form-tab active" id="login-tab">Вход</button>
+            <button class="form-tab" id="register-tab">Регистрация</button>
+        </div>
+        
+        <!-- Форма входа -->
+        <div class="form-content active" id="login-form">
+            <h2 class="form-title">Вход в систему</h2>
+            <p class="form-subtitle">Введите учетные данные для доступа к порталу</p>
+            
+            <form id="login-form-data" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="login-name">ФИО</label>
+                    <input type="text" class="form-input" id="login-name" placeholder="Иванов Иван Иванович" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Пароль</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="login-password" placeholder="Введите пароль" required>
+                        <button type="button" class="toggle-password" id="login-toggle-password">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4C4 4 1 10 1 10C1 10 4 16 10 16C16 16 19 10 19 10C19 10 16 4 10 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 13C11.6569 13 13 11.6569 13 10C13 8.34315 11.6569 7 10 7C8.34315 7 7 8.34315 7 10C7 11.6569 8.34315 13 10 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <a href="#" class="forgot-password" id="show-forgot-password-link">Забыли пароль?</a>
+                
+                <button type="submit" class="submit-btn">Войти</button>
+            </form>
+        </div>
+        
+        <!-- Форма регистрации -->
+        <div class="form-content" id="register-form">
+            <h2 class="form-title">Регистрация</h2>
+            <p class="form-subtitle">Создайте новую учетную запись</p>
+            
+            <form id="register-form-data" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="register-name">ФИО</label>
+                    <input type="text" class="form-input" id="register-name" placeholder="Иванов Иван Иванович" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="register-position">Должность</label>
+                    <input type="text" class="form-input" id="register-position" placeholder="например Инженер по метрологии" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="register-password">Пароль</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="register-password" placeholder="Создайте пароль" required minlength="6">
+                        <button type="button" class="toggle-password" id="register-toggle-password">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4C4 4 1 10 1 10C1 10 4 16 10 16C16 16 19 10 19 10C19 10 16 4 10 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 13C11.6569 13 13 11.6569 13 10C13 8.34315 11.6569 7 10 7C8.34315 7 7 8.34315 7 10C7 11.6569 8.34315 13 10 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="register-confirm-password">Подтверждение пароля</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="register-confirm-password" placeholder="Повторите пароль" required minlength="6">
+                        <button type="button" class="toggle-password" id="register-confirm-toggle-password">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 4C4 4 1 10 1 10C1 10 4 16 10 16C16 16 19 10 19 10C19 10 16 4 10 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 13C11.6569 13 13 11.6569 13 10C13 8.34315 11.6569 7 10 7C8.34315 7 7 8.34315 7 10C7 11.6569 8.34315 13 10 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Зарегистрироваться</button>
+            </form>
+        </div>
+
+        <!-- Форма: Восстановление пароля -->
+        <div class="form-content" id="forgot-password-form">
+            <h2 class="form-title">Восстановление пароля</h2>
+            <p class="form-subtitle">Введите ваше ФИО для сброса пароля</p>
+            
+            <form id="forgot-form-data" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="forgot-name">ФИО</label>
+                    <input type="text" class="form-input" id="forgot-name" placeholder="Иванов Иван Иванович" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Отправить инструкции</button>
+
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" class="forgot-password" id="back-to-login-link">Вернуться ко входу</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/utils/global-toaster.js"></script>
+    <script src="/js/script.js"></script>
+    
+</body>
+</html>

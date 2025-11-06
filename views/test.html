@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Прибор Автоматика | Система Тестирования</title>
+  
+  <!-- Подключение шрифта Manrope -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Подключение нового файла стилей -->
+  <link rel="stylesheet" href="/css/testing/test-modern.css">
+</head>
+<body>
+
+  <!-- Background Elements -->
+  <div class="bg-element bg-element-1"></div>
+  <div class="bg-element bg-element-2"></div>
+  <div class="bg-element bg-element-3"></div>
+  <div class="bg-shape bg-shape-1"></div>
+  <div class="bg-shape bg-shape-2"></div>
+
+  <div class="wrap">
+    
+    <div id="welcomeScreen">
+      <div class="card welcome-card">
+        <div class="welcome-content-wrapper">
+            <div class="welcome-visual">
+              <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb" stop-opacity="0.8"/>
+                    <stop offset="50%" stop-color="#7c3aed" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#ec4899" stop-opacity="0.4"/>
+                  </linearGradient>
+                  <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb"/>
+                    <stop offset="100%" stop-color="#7c3aed"/>
+                  </linearGradient>
+                  <linearGradient id="rotateGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb"/>
+                    <stop offset="50%" stop-color="#7c3aed"/>
+                    <stop offset="100%" stop-color="#ec4899"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="250" cy="250" r="200" fill="url(#mainGradient)" opacity="0.1"/>
+                <g transform="translate(250, 250)">
+                  <circle r="160" fill="none" stroke="url(#rotateGradient)" stroke-width="2" opacity="0.6" stroke-dasharray="8,8">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle r="120" fill="none" stroke="url(#rotateGradient)" stroke-width="1.5" opacity="0.4" stroke-dasharray="6,6">
+                    <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="15s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+                <g transform="translate(250, 250)">
+                  <rect x="-50" y="-50" width="100" height="100" rx="15" fill="none" stroke="url(#accentGradient)" stroke-width="3" opacity="0.8">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+                  </rect>
+                  <circle r="40" fill="none" stroke="url(#accentGradient)" stroke-width="2" opacity="0.8">
+                    <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="6s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+                <g>
+                  <circle cx="150" cy="150" r="10" fill="#2563eb" opacity="0.7">
+                    <animate attributeName="cy" values="150;130;150;170;150" dur="4s" repeatCount="indefinite"/>
+                    <animate attributeName="cx" values="150;140;150;160;150" dur="5s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="10;8;10;12;10" dur="3s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="350" cy="350" r="8" fill="#7c3aed" opacity="0.7">
+                    <animate attributeName="cx" values="350;360;350;340;350" dur="5s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="350;340;350;360;350" dur="4s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.7;0.9;0.7;0.5;0.7" dur="4s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="120" cy="300" r="7" fill="#ec4899" opacity="0.7">
+                    <animate attributeName="cy" values="300;280;300;320;300" dur="4.5s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="7;5;7;9;7" dur="3.5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="380" cy="180" r="9" fill="#2563eb" opacity="0.7">
+                    <animate attributeName="cx" values="380;370;380;390;380" dur="5.5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.7;0.5;0.7;0.9;0.7" dur="4s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="200" cy="100" r="6" fill="#7c3aed" opacity="0.6">
+                    <animate attributeName="cy" values="100;90;100;110;100" dur="3s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="300" cy="100" r="5" fill="#ec4899" opacity="0.6">
+                    <animate attributeName="cx" values="300;310;300;290;300" dur="4s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="100" cy="200" r="7" fill="#2563eb" opacity="0.6">
+                    <animate attributeName="cy" values="200;190;200;210;200" dur="3.5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="400" cy="250" r="6" fill="#7c3aed" opacity="0.6">
+                    <animate attributeName="cx" values="400;390;400;410;400" dur="4.5s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+                <g>
+                  <line x1="200" y1="200" x2="150" y2="150" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+                  </line>
+                  <line x1="300" y1="200" x2="350" y2="150" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                  </line>
+                  <line x1="200" y1="300" x2="150" y2="350" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="1s"/>
+                  </line>
+                  <line x1="300" y1="300" x2="350" y2="350" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                  </line>
+                </g>
+                <circle cx="250" cy="250" r="5" fill="#2563eb">
+                  <animate attributeName="r" values="5;10;5" dur="1.5s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="1;0.7;1" dur="1.5s" repeatCount="indefinite"/>
+                  <animate attributeName="fill" values="#2563eb;#7c3aed;#ec4899;#2563eb" dur="4s" repeatCount="indefinite"/>
+                </circle>
+                <g transform="translate(250, 250)">
+                  <polygon points="0,-80 20,-60 0,-40 -20,-60" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0.6">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="12s" repeatCount="indefinite"/>
+                  </polygon>
+                  <polygon points="0,80 20,60 0,40 -20,60" fill="none" stroke="#ec4899" stroke-width="2" opacity="0.6">
+                    <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="10s" repeatCount="indefinite"/>
+                  </polygon>
+                </g>
+              </svg>
+            </div>
+            <div class="welcome-form">
+                <h1>Добро пожаловать!</h1>
+                <p class="intro-text">Готовы проверить свои знания? Пожалуйста, представьтесь, чтобы начать.</p>
+                <div class="input-wrap with-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <input id="fioInputWelcome" type="text" placeholder="Ваше ФИО" />
+                </div>
+                <div class="start-btn">
+                  <button id="continueToTestsBtn" class="btn" type="button">Продолжить</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="testSelectionScreen" class="hidden">
+      <div class="modern-header">
+        <div class="header-content">
+          <h1 class="header-title" id="selectionTitle">Здравствуйте!</h1>
+          <p class="header-subtitle">Выберите тест для начала проверки знаний</p>
+        </div>
+        <div>
+            <button id="changeUserBtn" class="change-user-btn" title="Сменить пользователя">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+            </button>
+        </div>
+      </div>
+      <div id="publicTestList" class="test-grid">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <div id="testRunnerScreen" class="hidden">
+        <h1 id="testTitle">Загрузка теста...</h1>
+        <div id="resultsContainer">
+            <div id="finalSummary" class="card hidden"></div>
+            <div id="protocol" class="card hidden"></div>
+        </div>
+        <form id="quizForm" class="card hidden"></form>
+        <div id="exitButtonContainer" class="hidden no-print">
+            <a href="#" class="exit-link" id="exitToSelectionBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                Вернуться к выбору тестов
+            </a>
+        </div>
+    </div>
+  </div>
+
+  <div class="page-footer">&copy; 2025 Система Тестирования</div>
+
+  <div id="confirmModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-icon-wrap icon-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
+            <div class="modal-header-text">
+                <h3 id="confirmModalTitle">Подтвердите действие</h3>
+                <p id="confirmModalText">Вы уверены?</p>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button id="confirmModalCancelBtn" class="btn back-btn">Нет, отмена</button>
+            <button id="confirmModalOkBtn" class="btn btn-danger">Да, уверен</button>
+        </div>
+    </div>
+  </div>
+
+  <!-- Основной скрипт приложения -->
+  <script type="module" src="/js/test.js"></script>
+  
+  <!-- Скрипт для перетаскивания (для вопросов "на соответствие") -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+</body>
+</html>

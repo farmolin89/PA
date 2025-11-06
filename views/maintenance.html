@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>График проведения технического обслуживания</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Главные стили модуля -->
+    <link rel="stylesheet" href="/css/maintenance/maintenance.css">
+    
+    <!-- Стили компонента Datepicker -->
+    <link rel="stylesheet" href="/css/components/datepicker.css">
+</head>
+<body>
+    <!-- Декоративные анимированные элементы фона -->
+    <div class="floating-bg"></div>
+    <div class="floating-bg"></div>
+    <div class="floating-bg"></div>
+    <div class="pulsating-dot"></div>
+    <div class="pulsating-dot"></div>
+    <div class="pulsating-dot"></div>
+
+    <div class="container">
+        <!-- Новая унифицированная шапка -->
+        <header class="new-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-cogs"></i></div>
+                <div class="logo-text">
+                    <h1>Техническое обслуживание</h1>
+                    <p>Планирование и учет работ по ТО</p>
+                </div>
+            </div>
+            <div class="user-actions">
+                <div class="user-profile">
+                    <div class="user-avatar"><span>...</span></div>
+                    <div class="user-info">
+                        <span class="user-name">Загрузка...</span>
+                        <span class="user-role">...</span>
+                    </div>
+                </div>
+                <!-- +++ ИЗМЕНЕНИЕ: Кнопка "Назад" заменена на иконку +++ -->
+                <a href="/dashboard" title="Вернуться на дашборд" class="logout-button">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </header>
+        
+        <!-- Панель управления (поиск, год, кнопка) -->
+        <div class="controls-panel">
+            <div class="year-selector">
+                <div class="year-label">Год:</div>
+                <div class="year-buttons">
+                    <button class="year-nav" id="prevYear"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg></button>
+                    <div class="year-display" id="currentYear">2025</div>
+                    <button class="year-nav" id="nextYear"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg></button>
+                </div>
+            </div>
+            <div class="search-container">
+                <div class="search-box">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+                    <input type="text" class="search-input" id="maintenance-search-input" placeholder="Поиск по наименованию или зав. номеру...">
+                    <button class="clear-search" title="Очистить поиск"><svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M14 1.41L12.59 0 7 5.59 1.41 0 0 1.41 5.59 7 0 12.59 1.41 14 7 8.41 12.59 14 14 12.59 8.41 7 14 1.41z"/></svg></button>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-primary" id="addEquipment"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>Добавить оборудование</button>
+            </div>
+        </div>
+        
+        <div class="table-wrapper">
+            <div class="table-container" id="tableContainer">
+                <table id="mainTable">
+                    <thead>
+                        <tr>
+                            <th class="col-number">№ п/п<div class="resizer"></div></th>
+                            <th class="col-name sortable" data-column="name">Наименование<div class="resizer"></div></th>
+                            <th class="col-serial sortable" data-column="serial">Зав. №<div class="resizer"></div></th>
+                            <th class="col-work">Содержание работ<div class="resizer"></div></th>
+                            <th class="col-frequency">Периодичность ТО<div class="resizer"></div></th>
+                            <th class="col-month">Янв<div class="resizer"></div></th><th class="col-month">Фев<div class="resizer"></div></th><th class="col-month">Мар<div class="resizer"></div></th>
+                            <th class="col-month">Апр<div class="resizer"></div></th><th class="col-month">Май<div class="resizer"></div></th><th class="col-month">Июн<div class="resizer"></div></th>
+                            <th class="col-month">Июл<div class="resizer"></div></th><th class="col-month">Авг<div class="resizer"></div></th><th class="col-month">Сен<div class="resizer"></div></th>
+                            <th class="col-month">Окт<div class="resizer"></div></th><th class="col-month">Ноя<div class="resizer"></div></th><th class="col-month">Дек<div class="resizer"></div></th>
+                            <th class="col-actions"><div class="resizer"></div></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="date-tooltip" id="dateTooltip"></div>
+
+    <div class="modal" id="addEquipmentModal">
+        <div class="modal-content">
+             <form id="addEquipmentModalForm" onsubmit="return false;">
+                <div class="modal-header">
+                    <div class="modal-title" id="addEquipmentModalTitle">Добавление нового оборудования</div>
+                    <button type="button" class="modal-close"><svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M14 1.41L12.59 0 7 5.59 1.41 0 0 1.41 5.59 7 0 12.59 1.41 14 7 8.41 12.59 14 14 12.59 8.41 7 14 1.41z"/></svg></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group"><label class="form-label">Наименование оборудования *</label><input type="text" class="form-input" id="EquipmentName" placeholder="Введите наименование"></div>
+                    <div class="form-group"><label class="form-label">Заводской номер *</label><input type="text" class="form-input" id="EquipmentSerial" placeholder="Введите заводской номер"></div>
+                    <div class="form-group">
+                        <label class="form-label">Дата ввода в эксплуатацию *</label>
+                        <div class="calendar-wrapper">
+                            <input type="text" id="EquipmentStartDate" class="datepicker datepicker-input" placeholder="ДД.ММ.ГГГГ" data-hidden-field-id="EquipmentStartDateHidden">
+                            <span class="calendar-icon"><i class="fas fa-calendar-alt"></i></span>
+                            <div class="date-error">Некорректная дата</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="EquipmentStartDateHidden" name="equipmentStartDate">
+                    <div class="form-group">
+                        <label class="form-label">Технические обслуживания</label>
+                        <div class="services-list" id="servicesList"></div>
+                        <button type="button" class="add-service-btn" id="addServiceBtn"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>Добавить ТО</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="error-message" id="ErrorMessage"></div>
+                    <div class="modal-footer-buttons"><button type="submit" class="btn btn-primary" id="saveEquipment">Сохранить</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="serviceModalTitle">Добавление ТО</div>
+                <button type="button" class="modal-close"><svg width="16" height="16" viewBox="0 0 14 14" fill="currentColor"><path d="M14 1.41L12.59 0 7 5.59 1.41 0 0 1.41 5.59 7 0 12.59 1.41 14 7 8.41 12.59 14 14 12.59 8.41 7 14 1.41z"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label class="form-label">Содержание работ *</label><textarea class="form-textarea" id="serviceWork" placeholder="Опишите содержание работ"></textarea></div>
+                <div class="form-group"><label class="form-label">Периодичность ТО *</label><select class="form-select" id="serviceFrequency"><option>1 раз в месяц</option><option>1 раз в 3 месяца</option><option>1 раз в 6 месяцев</option><option>1 раз в год</option><option>1 раз в 2 года</option></select></div>
+            </div>
+            <div class="modal-footer">
+                <div class="error-message" id="serviceErrorMessage"></div>
+                <div class="modal-footer-buttons"><button type="button" class="btn btn-primary" id="saveService">Сохранить</button></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+            <h2 id="confirmModalTitle">Подтверждение</h2><p id="confirmModalText">Вы уверены?</p>
+            <div id="confirmModalInputWrapper" class="hidden"><input type="text" id="confirmModalInput" class="form-input"></div>
+            <div class="modal-actions"><button type="button" id="confirmModalCancelBtn" class="btn btn-secondary">Отмена</button><button type="button" id="confirmModalOkBtn" class="btn btn-danger">OK</button></div>
+        </div>
+    </div>
+    
+    <div class="notification-container" id="notification-container"></div>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="/js/utils/global-toaster.js"></script>
+    <script type="module" src="/js/common/modals.js"></script>
+    <script type="module" src="/js/components/datepicker.js"></script>
+    <script type="module" src="/js/maintenance/index.js"></script>
+</body>
+</html>
