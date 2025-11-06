@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "predev": "node scripts/predev.js",
     "dev": "node ./node_modules/nodemon/bin/nodemon.js server.js",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000 --detectOpenHandles",
     "setup": "npm install && echo \"Установка зависимостей завершена\"",
