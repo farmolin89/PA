@@ -1,0 +1,121 @@
+/*
+ * ==========================================================================
+ *  Модуль стилей для всех модальных окон
+ *  Версия 2.0: Добавлены стили для унификации поля ввода даты.
+ * ==========================================================================
+ */
+
+/* --- Стили для специфичных модальных окон страницы (.modal) --- */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    margin-top: -20px;
+    transition: opacity 0.3s ease, margin-top 0.3s ease;
+}
+
+.modal.active .modal-content {
+    opacity: 1;
+    margin-top: 0;
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+    color: white;
+    border-radius: 16px 16px 0 0;
+    flex-shrink: 0;
+}
+
+.modal-title { font-size: 18px; font-weight: 700; color: var(--white); }
+.modal-close { background: rgba(255, 255, 255, 0.2); border: none; cursor: pointer; color: var(--white); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); border-radius: 50%; padding: 0; }
+.modal-close:hover { background: rgba(255, 255, 255, 0.3); }
+.modal-close svg { width: 20px; height: 20px; transition: transform 0.2s ease; }
+.modal-close:hover svg { transform: rotate(90deg); }
+.modal-body { padding: 20px; overflow-y: auto; }
+.modal-footer { padding: 16px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fafafa; border-radius: 0 0 16px 16px; flex-shrink: 0; }
+.modal-footer-buttons { display: flex; gap: 12px; align-items: center; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--text-dark); font-size: 14px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; transition: all 0.3s ease; background: #fafafa; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); background: white; }
+.form-textarea { resize: vertical; min-height: 80px; }
+.error-message { color: var(--error-color); font-size: 14px; font-weight: 500; }
+.services-list { margin-top: 16px; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+.service-item { padding: 12px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+.service-item:last-child { border-bottom: none; }
+.service-info { flex: 1; }
+.service-work { font-weight: 600; margin-bottom: 4px; }
+.service-frequency { font-size: 13px; color: var(--text-light); }
+.service-actions { display: flex; gap: 8px; }
+.service-btn { background: none; border: none; cursor: pointer; padding: 6px; border-radius: 6px; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+.service-btn.edit { color: var(--primary-blue); }
+.service-btn.edit:hover { background-color: rgba(37, 99, 235, 0.1); }
+.service-btn.delete { color: var(--error-color); }
+.service-btn.delete:hover { background-color: rgba(239, 68, 68, 0.1); }
+.add-service-btn { margin-top: 12px; width: 100%; padding: 10px; background: none; border: 1px dashed var(--border-color); border-radius: 8px; cursor: pointer; color: var(--text-light); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.add-service-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); background-color: rgba(37, 99, 235, 0.05); }
+
+/* --- Стили для ОБЩЕГО модального окна (common/modals.js) --- */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(17, 24, 39, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1050; opacity: 0; visibility: hidden; backdrop-filter: blur(4px); transition: opacity 0.3s ease, visibility 0s 0.3s; }
+.modal-overlay.visible { opacity: 1; visibility: visible; transition: opacity 0.3s ease; }
+.modal-box { background-color: var(--white, #ffffff); padding: 24px 28px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); width: 90%; max-width: 450px; text-align: center; transform: translateY(20px) scale(0.98); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.modal-overlay.visible .modal-box { transform: translateY(0) scale(1); opacity: 1; }
+.modal-box h2 { margin-top: 0; margin-bottom: 12px; font-size: 1.25rem; color: var(--text-dark, #111827); }
+.modal-box p { margin-bottom: 24px; color: var(--text-light, #6b7280); line-height: 1.6; }
+.modal-box .modal-actions { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+.modal-box .btn-secondary { background-color: #f3f4f6; color: var(--text-dark); border: 1px solid #d1d5db; }
+.modal-box .btn-secondary:hover { background-color: #e5e7eb; }
+.modal-box .btn-danger { background: var(--error-color); color: white; border: none; }
+.modal-box .btn-danger:hover { background: #dc2626; }
+#confirmModalInputWrapper.hidden { display: none; }
+#confirmModalInputWrapper { margin-bottom: 20px; }
+
+/* --- Стили для поля ввода даты с иконкой --- */
+.date-input-wrapper {
+    position: relative;
+}
+
+.date-input-wrapper .form-input {
+    padding-right: 40px !important;
+}
+
+.date-input-wrapper .date-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--text-light);
+    pointer-events: none;
+}

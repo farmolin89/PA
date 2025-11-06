@@ -1,0 +1,27 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/eds/_base.css                                    */
+/* ОПИСАНИЕ: Базовые стили, сброс и стили для body                    */
+/* =================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    /* Позиционирование и размеры */
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    
+    /* Типография */
+    color: var(--dark);
+    line-height: 1.6;
+    
+    /* Фон с анимацией */
+    background: linear-gradient(-45deg, #f8fafc, #f9fbff, #f7f9fc, #fafdff);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}

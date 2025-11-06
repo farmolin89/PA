@@ -1,0 +1,37 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/eds/_variables.css                               */
+/* ОПИСАНИЕ: Глобальные переменные и дизайн-токены проекта           */
+/* =================================================================== */
+
+:root {
+    /* Основная цветовая палитра */
+    --primary: #2563eb;
+    --primary-light: #3b82f6;
+    --primary-dark: #1d4ed8;
+    --secondary: #06b6d4;
+    --accent: #0ea5e9;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --light: #f8fafc;
+    --dark: #1e293b;
+    --gray: #64748b;
+    --gray-light: #e2e8f0;
+    
+    /* Геометрия и скругления */
+    --border-radius: 20px;
+    --border-radius-sm: 12px;
+    
+    /* Эффекты и тени */
+    --box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --box-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
+    --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --glass-effect: rgba(255, 255, 255, 0.85);
+    
+    /* Градиенты */
+    --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    --gradient-accent: linear-gradient(135deg, var(--accent), #0284c7);
+    --gradient-success: linear-gradient(135deg, var(--success), #059669);
+    --gradient-warning: linear-gradient(135deg, var(--warning), #d97706);
+    --gradient-danger: linear-gradient(135deg, var(--danger), #dc2626);
+}

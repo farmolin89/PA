@@ -1,0 +1,38 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/eds/_responsive.css                              */
+/* ОПИСАНИЕ: Медиа-запросы для адаптивного дизайна                   */
+/* =================================================================== */
+
+/* ==================== 16) МЕДИА-ЗАПРОСЫ ==================== */
+@media (max-width: 768px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+    }
+    
+    .card-body,
+    .modal-body,
+    .modal-footer {
+        padding: 24px;
+    }
+    
+    .dashboard-controls {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+}

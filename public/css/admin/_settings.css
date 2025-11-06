@@ -1,0 +1,82 @@
+/* ===================================================================
+ * ФАЙЛ: public/css/admin/_settings.css (ПОЛНАЯ ФИНАЛЬНАЯ ВЕРСИЯ)
+ * ===================================================================
+ */
+
+/* --- 1. Основной контейнер и сетка --- */
+
+.settings-form {
+    margin-top: 1.5rem;
+}
+
+/* --- 2. Стили для секции публикации --- */
+
+.publication {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-light);
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+/* --- 3. Стили для переключателя (Toggle Switch) --- */
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--gray-light);
+    transition: var(--transition);
+    border-radius: 34px;
+    border: 1px solid #ccc;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: var(--transition);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(30px);
+}
+
+/* Состояние focus для доступности */
+input:focus + .toggle-slider {
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}

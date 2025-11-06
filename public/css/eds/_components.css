@@ -1,0 +1,613 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/eds/_components.css                              */
+/* ОПИСАНИЕ: Стили для переиспользуемых компонентов интерфейса       */
+/* =================================================================== */
+
+/* ==================== 4) КАРТОЧКИ (CARD) ==================== */
+.card {
+    /* Позиционирование и размеры */
+    overflow: hidden;
+    margin-bottom: 32px;
+    
+    /* Границы и скругления */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--border-radius);
+    
+    /* Стили glass-эффекта */
+    background: var(--glass-effect);
+    backdrop-filter: blur(10px);
+    
+    /* Эффекты и анимации */
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.card-header {
+    /* Flex-разметка */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    /* Отступы */
+    padding: 20px 32px;
+    
+    /* Визуальное оформление */
+    color: #fff;
+    background: var(--gradient-primary);
+}
+
+.card-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 32px;
+}
+
+/* ==================== 5) КНОПКИ (BTN) ==================== */
+.btn {
+    /* Позиционирование */
+    position: relative;
+    overflow: hidden;
+    
+    /* Flex-разметка */
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    
+    /* Размеры и отступы */
+    padding: 14px 28px;
+    border-radius: var(--border-radius-sm);
+    
+    /* Типография */
+    font-size: 0.95rem;
+    font-weight: 600;
+    
+    /* Границы и интерактивность */
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.btn:hover::after {
+    opacity: 1;
+}
+
+/* Варианты кнопок */
+.btn-primary {
+    color: #fff;
+    background: var(--gradient-primary);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+}
+
+.btn-success {
+    color: #fff;
+    background: var(--gradient-success);
+}
+
+.btn-warning {
+    color: #fff;
+    background: var(--gradient-warning);
+}
+
+.btn-danger {
+    color: #fff;
+    background: var(--gradient-danger);
+}
+
+.btn-outline {
+    color: var(--dark);
+    background: transparent;
+    border: 1px solid var(--gray-light);
+}
+
+.btn-outline:hover {
+    background: var(--gray-light);
+}
+
+.btn-sm {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+}
+
+/* ==================== 7) АВАТАРЫ СОТРУДНИКОВ ==================== */
+.employee-avatar,
+.employee-card-avatar {
+    /* Центрирование содержимого */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Форма */
+    border-radius: 50%;
+    
+    /* Типография */
+    font-weight: 600;
+    color: #fff;
+    
+    /* Градиентный фон */
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    transition: var(--transition);
+}
+
+/* Варианты аватаров по полу */
+.employee-avatar.avatar-female,
+.employee-card-avatar.avatar-female {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+}
+
+.employee-avatar.avatar-unknown,
+.employee-card-avatar.avatar-unknown {
+    background: linear-gradient(135deg, var(--gray), #475569);
+}
+
+.employee-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.employee-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+}
+
+.employee-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-name {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.employee-position {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+/* ==================== 8) БЕЙДЖИ СТАТУСОВ И ДЕЙСТВИЯ ==================== */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Варианты статусов */
+.status-active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #047857;
+}
+
+.status-expiring {
+    background: rgba(245, 158, 11, 0.15);
+    color: #b45309;
+}
+
+.status-expired {
+    background: rgba(239, 68, 68, 0.15);
+    color: #b91c1c;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.row-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.row-action-btn {
+    /* Позиционирование */
+    position: relative;
+    
+    /* Центрирование содержимого */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Размеры */
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+    border-radius: var(--border-radius-sm);
+    
+    /* Стили */
+    color: var(--gray);
+    background: none;
+    border: none;
+    
+    /* Интерактивность */
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.row-action-btn:hover {
+    transform: scale(1.1);
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* ==================== 10) СТАТИСТИКА (STATS) ==================== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    /* Flex-разметка */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    
+    /* Размеры и отступы */
+    padding: 24px;
+    border-radius: var(--border-radius);
+    
+    /* Стили glass-эффекта */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: var(--glass-effect);
+    backdrop-filter: blur(10px);
+    
+    /* Эффекты и анимации */
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-lg);
+}
+
+.stat-icon {
+    /* Центрирование содержимого */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    /* Размеры и форма */
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    
+    /* Типография */
+    font-size: 1.8rem;
+    
+    /* Эффекты */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.stat-info h3 {
+    margin-bottom: 8px;
+    line-height: 1.1;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.stat-info p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--gray);
+}
+
+/* Варианты иконок статистики */
+.icon-total {
+    color: #fff;
+    background: var(--gradient-primary);
+}
+
+.icon-active {
+    color: #fff;
+    background: var(--gradient-success);
+}
+
+.icon-expiring {
+    color: #fff;
+    background: var(--gradient-warning);
+}
+
+.icon-expired {
+    color: #fff;
+    background: var(--gradient-danger);
+}
+
+/* ==================== 11) ПЕКЛЮЧАТЕЛИ И КАРТОЧКИ ==================== */
+.dashboard-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.view-toggle {
+    display: flex;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--border-radius-sm);
+    background: var(--glass-effect);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.view-btn {
+    /* Flex-разметка */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    /* Размеры и отступы */
+    padding: 10px 20px;
+    border-radius: 12px;
+    
+    /* Стили и интерактивность */
+    background: transparent;
+    color: var(--gray);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.view-btn.active {
+    color: #fff;
+    background: var(--primary);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.cards-view {
+    display: none;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.employee-card {
+    /* Позиционирование */
+    position: relative;
+    
+    /* Grid-разметка */
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: auto auto auto;
+    align-items: center;
+    gap: 4px 16px;
+    
+    /* Размеры и отступы */
+    padding: 20px;
+    border-radius: var(--border-radius-sm);
+    
+    /* Стили glass-эффекта */
+    border: 1px solid var(--gray-light);
+    background: var(--glass-effect);
+    backdrop-filter: blur(10px);
+    
+    /* Эффекты и анимации */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+}
+
+.employee-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--primary-light);
+}
+
+.employee-card-avatar {
+    grid-row: 1 / span 3;
+    width: 60px;
+    height: 60px;
+    font-size: 1.2rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.employee-card-main-info {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    line-height: 1.3;
+}
+
+.employee-card-name {
+    margin-bottom: 2px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.employee-card-position {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+.employee-card-meta {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 8px 0;
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+.employee-card-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.employee-card-meta .meta-item i {
+    color: var(--primary);
+}
+
+.employee-card-footer {
+    grid-column: 2;
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    border-top: 1px solid var(--gray-light);
+}
+
+.employee-card-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+/* ==================== 12) ЯЧЕЙКИ ДАТ ==================== */
+.date-cell {
+    /* Flex-разметка */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    
+    /* Размеры и отступы */
+    min-width: 150px;
+    padding: 12px;
+    
+    /* Типография */
+    text-align: center;
+    font-weight: 600;
+    border-radius: var(--border-radius-sm);
+}
+
+/* Варианты ячеек дат */
+.date-active {
+    color: var(--success);
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.date-expiring {
+    color: var(--warning);
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.date-expired {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.date-icon {
+    font-size: 1.2rem;
+}
+
+.date-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.expiry-days {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.date-range span {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+/* ==================== 13) ПОДСКАЗКИ (TOOLTIP) ==================== */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    /* Позиционирование */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Размеры и отступы */
+    width: 180px;
+    padding: 10px;
+    
+    /* Типография */
+    text-align: center;
+    font-size: 0.8rem;
+    color: #fff;
+    
+    /* Визуальное оформление */
+    border-radius: var(--border-radius-sm);
+    background: var(--dark);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    
+    /* Анимации */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--dark) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
