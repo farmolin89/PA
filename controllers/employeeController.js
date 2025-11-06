@@ -6,6 +6,16 @@
 // что делает код более простым и надежным.
 // ===================================================================
 
+const normalizePatronymic = (value) => {
+    if (value === undefined || value === null) {
+        return null;
+    }
+    if (typeof value !== 'string') {
+        return value;
+    }
+    return value.trim();
+};
+
 module.exports = (employeeService) => ({
     /**
      * Получает всех сотрудников.
@@ -27,7 +37,7 @@ module.exports = (employeeService) => ({
         try {
             // Просто пытаемся создать сотрудника.
             // Если ФИО уже существует, база данных вернет ошибку, которую мы поймаем в catch.
-            const employeeData = { ...req.body, patronymic: req.body.patronymic || null };
+            const employeeData = { ...req.body, patronymic: normalizePatronymic(req.body.patronymic) };
             const newEmployee = await employeeService.create(employeeData);
             res.status(201).json(newEmployee);
         } catch (err) {
@@ -49,7 +59,7 @@ module.exports = (employeeService) => ({
         try {
             // Просто пытаемся обновить сотрудника.
             // Если новое ФИО конфликтует с другой записью, база данных вернет ошибку.
-            const employeeData = { ...req.body, patronymic: req.body.patronymic || null };
+            const employeeData = { ...req.body, patronymic: normalizePatronymic(req.body.patronymic) };
             const updatedEmployee = await employeeService.update(id, employeeData);
             
             if (!updatedEmployee) {
