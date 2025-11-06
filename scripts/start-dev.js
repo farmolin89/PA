@@ -1,9 +1,28 @@
 #!/usr/bin/env node
 
-const { spawn } = require('child_process');
+const fs = require('fs');
+const { spawn, spawnSync } = require('child_process');
 const path = require('path');
 
 const serverEntry = path.resolve(__dirname, '..', 'server.js');
+const projectRoot = path.resolve(__dirname, '..');
+
+function ensureDependencies() {
+  const modulesDir = path.join(projectRoot, 'node_modules');
+
+  if (fs.existsSync(modulesDir)) {
+    return;
+  }
+
+  console.log('[dev] Обнаружено отсутствие директории node_modules. Выполняю "npm install" для установки зависимостей...');
+  const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const installResult = spawnSync(npmCommand, ['install'], { stdio: 'inherit', cwd: projectRoot });
+
+  if (installResult.status !== 0) {
+    console.error('[dev] Не удалось автоматически установить зависимости. Выполните "npm install" вручную и повторите запуск.');
+    process.exit(installResult.status ?? 1);
+  }
+}
 
 function runProcess(command, args) {
   const child = spawn(command, args, {
@@ -24,6 +43,8 @@ function runProcess(command, args) {
     process.exit(code ?? 0);
   });
 }
+
+ensureDependencies();
 
 try {
   const nodemonBinary = require.resolve('nodemon/bin/nodemon.js');
