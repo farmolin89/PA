@@ -52,6 +52,7 @@ export async function initializeTestSelection() {
  */
 async function onTestSelect(test) {
     const { id: testId, name: testName } = test;
+    const status = test.status || (test.passedStatus ? 'passed' : 'not_started');
     const { userFIO } = testState.getState();
 
     const startNewTest = () => {
@@ -61,7 +62,7 @@ async function onTestSelect(test) {
     };
 
     // Если у теста есть статус "сдан"
-    if (test.passedStatus) {
+    if (status === 'passed') {
         showConfirmModal({
             title: 'Тест уже сдан',
             text: `Вы уже успешно прошли тест "${testName}". Что вы хотите сделать?`,
@@ -79,6 +80,14 @@ async function onTestSelect(test) {
             },
             confirmText: 'Пройти заново',
             cancelText: 'Посмотреть результат'
+        });
+    } else if (status === 'pending') {
+        showConfirmModal({
+            title: 'Результат на проверке',
+            text: `Ваши ответы по тесту "${testName}" ожидают ручной проверки. Начать новый проход?`,
+            onConfirm: startNewTest,
+            confirmText: 'Пройти заново',
+            cancelText: 'Отмена'
         });
     } else {
         // Если тест не сдан, сразу показываем стандартное подтверждение старта

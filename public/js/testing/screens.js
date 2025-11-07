@@ -18,13 +18,34 @@ function createTestCardElement(test, onSelectCallback) {
     testCard.className = 'test-card';
     testCard.dataset.id = test.id;
 
-    if (test.passedStatus) {
+    const status = test.status || (test.passedStatus ? 'passed' : 'not_started');
+    if (status === 'passed') {
         testCard.classList.add('passed');
+    } else if (status === 'failed') {
+        testCard.classList.add('failed');
+    } else if (status === 'pending') {
+        testCard.classList.add('pending');
     }
     
     const questionsCount = test.questions_per_test;
     const passingScore = test.passing_score;
     const duration = test.duration_minutes;
+
+    const statusClass = status === 'passed'
+        ? 'passed'
+        : status === 'failed'
+            ? 'failed'
+            : status === 'pending'
+                ? 'pending'
+                : '';
+
+    const statusText = status === 'passed'
+        ? 'Тест сдан'
+        : status === 'failed'
+            ? 'Тест не сдан'
+            : status === 'pending'
+                ? 'Ожидает проверки'
+                : 'Не начат';
 
     testCard.innerHTML = `
         <div class="test-card-title">${escapeHTML(test.name)}</div>
@@ -55,7 +76,7 @@ function createTestCardElement(test, onSelectCallback) {
             </div>
         </div>
         <div class="test-status">
-            <div class="status-text ${test.passedStatus ? 'passed' : ''}">${test.passedStatus ? 'Тест сдан' : 'Не начат'}</div>
+            <div class="status-text ${statusClass}">${statusText}</div>
             <!-- Этот блок можно будет заполнять в будущем, если API будет возвращать доп. инфо -->
             <div class="correct-answers"></div>
         </div>

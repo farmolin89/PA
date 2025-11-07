@@ -41,6 +41,27 @@ body {
     font-size: 16px;
 }
 
+/* ==================== Стили для уведомлений Toastify ==================== */
+.toastify.toast-success {
+    background: var(--success);
+    color: #ffffff;
+}
+
+.toastify.toast-error {
+    background: var(--danger);
+    color: #ffffff;
+}
+
+.toastify.toast-warning {
+    background: var(--warning);
+    color: #7c2d12;
+}
+
+.toastify.toast-info {
+    background: var(--primary);
+    color: #ffffff;
+}
+
 /* ==================== Стили для спиннера ==================== */
 .spinner {
     border: 4px solid rgba(0, 0, 0, 0.1);
