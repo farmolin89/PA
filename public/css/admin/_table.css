@@ -21,7 +21,7 @@ table.admin-table {
 
 /* --- 2. Заголовки и ячейки таблицы --- */
 
-table.admin-table th, 
+table.admin-table th,
 table.admin-table td {
     padding: 1rem;
     text-align: left;
@@ -52,6 +52,15 @@ table.admin-table tbody tr:last-child td {
 
 table.admin-table tbody tr:hover {
     background-color: var(--light);
+}
+
+/* --- 3a. Чекбоксы для таблиц с результатами --- */
+#selectAllResultsCheckbox,
+.result-checkbox {
+    width: 1.15rem;
+    height: 1.15rem;
+    cursor: pointer;
+    accent-color: var(--primary);
 }
 
 /* --- 3. Стилизация специфичных элементов в таблице --- */
