@@ -75,20 +75,31 @@ module.exports = (db) => {
         
         // 4. Получаем проходной балл для теста.
         const resultInfo = await trx('results').where('id', resultId).select('test_id').first();
-        const testSettings = await trx('test_settings').where('test_id', resultInfo.test_id).select('passing_score').first();
+        const testSettings = await trx('test_settings')
+            .where('test_id', resultInfo.test_id)
+            .select('passing_score', 'questions_per_test')
+            .first();
         
         const total = Number(totalResult.total);
         const score = Number(scoreResult.score);
         const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
-        const passed = percentage >= (testSettings.passing_score || 70); // Используем 70% как fallback
+
+        const questionsTarget = Math.max(1, (testSettings?.questions_per_test) || total || 1);
+        const defaultPassingScore = Math.ceil(questionsTarget * 0.7);
+        const normalizedPassingScore = Math.max(
+            1,
+            Math.min((testSettings?.passing_score) || defaultPassingScore, questionsTarget)
+        );
+
+        const passed = score >= normalizedPassingScore;
 
         // 5. Обновляем запись в таблице results.
-        await trx('results').where('id', resultId).update({ 
-            score, 
-            total, 
-            percentage, 
-            passed, 
-            status: 'completed' 
+        await trx('results').where('id', resultId).update({
+            score,
+            total,
+            percentage,
+            passed,
+            status: 'completed'
         });
 
         // === КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Готовим данные для SSE ВНУТРИ транзакции ===

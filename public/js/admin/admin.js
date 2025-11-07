@@ -69,14 +69,18 @@ async function handleGenerateLink() {
  * Инициализирует все глобальные обработчики событий.
  */
 function initializeEventListeners() {
+    const NAVIGATION_PAGES = new Set(['welcome', 'tests', 'create-test', 'analytics']);
+
     document.body.addEventListener('click', (e) => {
         const navElement = e.target.closest('.nav-link[data-page], .sidebar-footer .btn[data-page], #main-content-area .btn[data-page]');
         if (navElement) {
-            e.preventDefault();
             const pageId = navElement.dataset.page;
-            if (pageId) {
-                handleNavigation(pageId);
+            if (!pageId || !NAVIGATION_PAGES.has(pageId)) {
+                return;
             }
+
+            e.preventDefault();
+            handleNavigation(pageId);
         }
     });
 
