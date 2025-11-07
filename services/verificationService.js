@@ -15,11 +15,20 @@ const TABLE_NAME = 'verification_equipment';
  */
 const deleteFileFromServer = (filePath) => {
     if (!filePath) return; // Если пути нет, ничего не делаем
-    // Строим полный, абсолютный путь к файлу
-    const fullPath = path.join(__dirname, '..', 'public', filePath);
+
+    // Путь из базы хранится с префиксом '/uploads/...'. Такой абсолютный путь
+    // "обнуляет" предыдущие сегменты при использовании path.join, поэтому
+    // необходимо удалить ведущий слэш.
+    const sanitizedRelativePath = filePath.startsWith('/') ? filePath.slice(1) : filePath;
+    const normalizedRelativePath = path
+        .normalize(sanitizedRelativePath)
+        .replace(/^([.]{2}[\/])+/, '');
+
+    // Строим полный, абсолютный путь к файлу внутри публичной директории.
+    const fullPath = path.join(__dirname, '..', 'public', normalizedRelativePath);
     fs.unlink(fullPath, (err) => {
         // Игнорируем ошибку, если файла и так не существует (ENOENT)
-        if (err && err.code !== 'ENOENT') { 
+        if (err && err.code !== 'ENOENT') {
             console.error(`Не удалось удалить файл: ${fullPath}`, err);
         }
     });
