@@ -51,7 +51,7 @@ function createTestCardElement(test, onSelectCallback) {
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
               </svg>
-              <span class="meta-text">${passingScore}% для сдачи</span>
+              <span class="meta-text">Нужно ${passingScore} из ${questionsCount} правильных ответов</span>
             </div>
         </div>
         <div class="test-status">

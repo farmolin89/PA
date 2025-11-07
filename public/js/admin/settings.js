@@ -16,9 +16,14 @@ async function loadSettings() {
     try {
         // Загружаем основные настройки
         const settings = await fetchTestSettings(currentTestId);
-        document.getElementById('durationInput').value = settings.duration_minutes;
-        document.getElementById('passingScoreInput').value = settings.passing_score;
-        document.getElementById('questionsCountInput').value = settings.questions_per_test;
+        const durationInput = document.getElementById('durationInput');
+        const passingScoreInput = document.getElementById('passingScoreInput');
+        const questionsInput = document.getElementById('questionsCountInput');
+
+        durationInput.value = settings.duration_minutes;
+        questionsInput.value = settings.questions_per_test;
+        passingScoreInput.max = settings.questions_per_test;
+        passingScoreInput.value = Math.min(settings.passing_score, settings.questions_per_test);
         
         // Загружаем статус публикации
         const allTests = await fetchTests();
@@ -54,6 +59,11 @@ async function handleSaveSettings() {
     if (isNaN(settingsData.duration_minutes) || isNaN(settingsData.passing_score) || isNaN(settingsData.questions_per_test) ||
         settingsData.duration_minutes <= 0 || settingsData.passing_score <= 0 || settingsData.questions_per_test <= 0) {
         showToast('Все поля должны быть заполнены положительными числами.', 'error');
+        return;
+    }
+
+    if (settingsData.passing_score > settingsData.questions_per_test) {
+        showToast('Проходной балл не может превышать количество вопросов.', 'error');
         return;
     }
     
@@ -157,8 +167,24 @@ export function initSettingsModule(testId, callback) {
     `;
 
     // Навешиваем обработчики на созданные элементы
+    const questionsInput = document.getElementById('questionsCountInput');
+    const passingInput = document.getElementById('passingScoreInput');
+
     document.getElementById('saveSettingsBtn').addEventListener('click', handleSaveSettings);
     document.getElementById('publishToggle').addEventListener('change', handlePublishToggle);
+
+    questionsInput.addEventListener('input', () => {
+        const questionsValue = parseInt(questionsInput.value, 10);
+        if (isNaN(questionsValue) || questionsValue <= 0) {
+            return;
+        }
+
+        passingInput.max = questionsValue;
+        const currentPassingValue = parseInt(passingInput.value, 10);
+        if (!isNaN(currentPassingValue) && currentPassingValue > questionsValue) {
+            passingInput.value = questionsValue;
+        }
+    });
     
     // Загружаем начальные данные
     loadSettings();

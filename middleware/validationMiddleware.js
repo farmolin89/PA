@@ -151,8 +151,31 @@ const verificationValidation = [
 const testCreationValidation = [
     body('name').trim().notEmpty().withMessage('обязательно для заполнения'),
     body('duration_minutes').optional().isInt({ min: 1, max: 480 }).withMessage('должно быть числом от 1 до 480'),
-    body('passing_score').optional().isInt({ min: 1, max: 100 }).withMessage('должно быть числом от 1 до 100'),
     body('questions_per_test').optional().isInt({ min: 1 }).withMessage('должно быть числом больше 0'),
+    body('passing_score')
+        .optional()
+        .isInt({ min: 1 }).withMessage('должно быть числом больше 0')
+        .custom((value, { req }) => {
+            const questionsPerTest = Number(req.body.questions_per_test);
+            if (Number.isInteger(questionsPerTest) && questionsPerTest > 0 && Number(value) > questionsPerTest) {
+                throw new Error('не может превышать количество вопросов');
+            }
+            return true;
+        }),
+];
+
+const testSettingsValidation = [
+    body('duration_minutes').isInt({ min: 1, max: 480 }).withMessage('должно быть числом от 1 до 480'),
+    body('questions_per_test').isInt({ min: 1 }).withMessage('должно быть числом больше 0'),
+    body('passing_score')
+        .isInt({ min: 1 }).withMessage('должно быть числом больше 0')
+        .custom((value, { req }) => {
+            const questionsPerTest = Number(req.body.questions_per_test);
+            if (Number.isInteger(questionsPerTest) && Number(value) > questionsPerTest) {
+                throw new Error('не может превышать количество вопросов');
+            }
+            return true;
+        }),
 ];
 
 const bulkDeleteValidation = [
@@ -183,6 +206,7 @@ module.exports = {
     verificationValidation,
     // Новые правила для модуля тестов
     testCreationValidation,
+    testSettingsValidation,
     bulkDeleteValidation,
     reviewBatchValidation,
 };

@@ -4,6 +4,23 @@
 
 const { v4: uuidv4 } = require('uuid');
 
+const DEFAULT_DURATION_MINUTES = 10;
+const DEFAULT_QUESTIONS_PER_TEST = 20;
+
+function getQuestionsCount(value) {
+    const numericValue = Number(value);
+    return Number.isInteger(numericValue) && numericValue > 0 ? numericValue : DEFAULT_QUESTIONS_PER_TEST;
+}
+
+function getNormalizedPassingScore(rawScore, questionsCount) {
+    const fallback = Math.max(1, Math.ceil(questionsCount * 0.7));
+    const numericScore = Number(rawScore);
+    if (!Number.isInteger(numericScore) || numericScore <= 0) {
+        return fallback;
+    }
+    return Math.max(1, Math.min(numericScore, questionsCount));
+}
+
 /**
  * Фабричная функция для создания сервиса управления тестами.
  * @param {object} db - Экземпляр Knex.js.
@@ -67,11 +84,14 @@ module.exports = (db) => {
                 // Получаем только что созданный тест, чтобы вернуть его клиенту
                 newTest = await trx('tests').where('id', testId).first();
 
+                const questionsCount = getQuestionsCount(questions_per_test);
+                const normalizedPassingScore = getNormalizedPassingScore(passing_score, questionsCount);
+
                 await trx('test_settings').insert({
                     test_id: testId,
-                    duration_minutes: duration_minutes || 10,
-                    questions_per_test: questions_per_test || 20,
-                    passing_score: passing_score || 70
+                    duration_minutes: Number(duration_minutes) > 0 ? Number(duration_minutes) : DEFAULT_DURATION_MINUTES,
+                    questions_per_test: questionsCount,
+                    passing_score: normalizedPassingScore
                 });
             });
 
@@ -109,15 +129,35 @@ module.exports = (db) => {
         getTestSettings: async (testId) => {
             const settings = await db('test_settings').where({ test_id: testId }).first();
             if (!settings) {
+                const questionsCount = DEFAULT_QUESTIONS_PER_TEST;
                 const defaultSettings = {
                     test_id: testId,
-                    duration_minutes: 10,
-                    questions_per_test: 20,
-                    passing_score: 70
+                    duration_minutes: DEFAULT_DURATION_MINUTES,
+                    questions_per_test: questionsCount,
+                    passing_score: getNormalizedPassingScore(null, questionsCount)
                 };
                 await db('test_settings').insert(defaultSettings);
                 return defaultSettings;
             }
+
+            const questionsCount = getQuestionsCount(settings.questions_per_test);
+            const normalizedPassingScore = getNormalizedPassingScore(settings.passing_score, questionsCount);
+
+            if (
+                settings.questions_per_test !== questionsCount ||
+                settings.passing_score !== normalizedPassingScore
+            ) {
+                await db('test_settings').where({ test_id: testId }).update({
+                    questions_per_test: questionsCount,
+                    passing_score: normalizedPassingScore
+                });
+                return {
+                    ...settings,
+                    questions_per_test: questionsCount,
+                    passing_score: normalizedPassingScore
+                };
+            }
+
             return settings;
         },
 
@@ -125,8 +165,30 @@ module.exports = (db) => {
          * Сохраняет настройки для конкретного теста.
          */
         saveTestSettings: async (testId, settingsData) => {
-            const { test_id, ...dataToUpdate } = settingsData;
-            return db('test_settings').where({ test_id: testId }).update(dataToUpdate);
+            const existingSettings = await db('test_settings').where({ test_id: testId }).first();
+
+            const mergedSettings = {
+                duration_minutes: Number(settingsData.duration_minutes ?? existingSettings?.duration_minutes ?? DEFAULT_DURATION_MINUTES),
+                questions_per_test: getQuestionsCount(settingsData.questions_per_test ?? existingSettings?.questions_per_test),
+                passing_score: settingsData.passing_score ?? existingSettings?.passing_score
+            };
+
+            const normalizedPassingScore = getNormalizedPassingScore(
+                mergedSettings.passing_score,
+                mergedSettings.questions_per_test
+            );
+
+            const payload = {
+                duration_minutes: mergedSettings.duration_minutes,
+                questions_per_test: mergedSettings.questions_per_test,
+                passing_score: normalizedPassingScore
+            };
+
+            if (existingSettings) {
+                return db('test_settings').where({ test_id: testId }).update(payload);
+            }
+
+            return db('test_settings').insert({ test_id: testId, ...payload });
         },
 
         /**
