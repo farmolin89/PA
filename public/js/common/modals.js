@@ -9,6 +9,10 @@
 let confirmCallback = null;
 let cancelCallback = null;
 
+function generateDialogId() {
+    return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+}
+
 /**
  * Открывает указанное модальное окно с плавной CSS-анимацией.
  * @param {HTMLElement} modalElement - DOM-элемент модального окна, которое нужно открыть.
@@ -70,6 +74,7 @@ export function showConfirmModal(options) {
     // Сохраняем переданные коллбэки в глобальные переменные
     confirmCallback = onConfirm;
     cancelCallback = onCancel;
+    modal.dataset.dialogId = generateDialogId();
 
     // Настраиваем текстовое содержимое
     modal.querySelector('#confirmModalTitle').textContent = title;
@@ -123,22 +128,31 @@ function initializeModalHandlers() {
 
         if (okBtn) {
             okBtn.addEventListener('click', () => {
-                // Если для этого окна был назначен коллбэк, выполняем его
-                if (typeof confirmCallback === 'function') {
-                    confirmCallback();
+                const currentDialogId = confirmModal.dataset.dialogId;
+                const callback = confirmCallback;
+                confirmCallback = null;
+                cancelCallback = null;
+                if (typeof callback === 'function') {
+                    callback();
                 }
-                // В любом случае закрываем окно
-                closeModal(confirmModal);
+                if (confirmModal.dataset.dialogId === currentDialogId) {
+                    closeModal(confirmModal);
+                }
             });
         }
 
         if (cancelBtn) {
             cancelBtn.addEventListener('click', () => {
-                // Если был назначен коллбэк отмены, выполняем его
-                if (typeof cancelCallback === 'function') {
-                    cancelCallback();
+                const currentDialogId = confirmModal.dataset.dialogId;
+                const callback = cancelCallback;
+                confirmCallback = null;
+                cancelCallback = null;
+                if (typeof callback === 'function') {
+                    callback();
                 }
-                closeModal(confirmModal);
+                if (confirmModal.dataset.dialogId === currentDialogId) {
+                    closeModal(confirmModal);
+                }
             });
         }
     }
