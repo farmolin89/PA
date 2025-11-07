@@ -19,21 +19,27 @@ const CACHEABLE_ENDPOINTS = [
     '/api/verification/equipment'
 ];
 
+function matchesCacheableEndpoint(urlString, endpoint) {
+    const base = endpoint.split('/:')[0];
+    return urlString === base || urlString.startsWith(`${base}?`);
+}
+
 // ============================
 // ОСНОВНАЯ ФУНКЦИЯ API FETCH
 // ============================
 export async function apiFetch(url, options = {}) {
     const urlString = url.toString();
     const method = options.method || 'GET';
-    if (method === 'GET' && CACHEABLE_ENDPOINTS.some(endpoint => urlString.startsWith(endpoint))) {
+    if (method === 'GET' && CACHEABLE_ENDPOINTS.some(endpoint => matchesCacheableEndpoint(urlString, endpoint))) {
         const cachedData = sessionStorage.getItem(urlString);
         if (cachedData) return JSON.parse(cachedData);
     }
     if (['POST', 'PUT', 'DELETE'].includes(method)) {
         CACHEABLE_ENDPOINTS.forEach(endpoint => {
-            if (urlString.startsWith(endpoint.split('/:')[0])) {
+            const base = endpoint.split('/:')[0];
+            if (urlString.startsWith(base)) {
                 Object.keys(sessionStorage).forEach(key => {
-                    if (key.startsWith(endpoint.split('/:')[0])) sessionStorage.removeItem(key);
+                    if (matchesCacheableEndpoint(key, endpoint)) sessionStorage.removeItem(key);
                 });
             }
         });
@@ -83,7 +89,7 @@ export async function apiFetch(url, options = {}) {
         }
         if (response.status === 204 || response.headers.get('content-length') === '0') return null;
         const data = await response.json();
-        if (method === 'GET' && CACHEABLE_ENDPOINTS.some(endpoint => urlString.startsWith(endpoint))) {
+        if (method === 'GET' && CACHEABLE_ENDPOINTS.some(endpoint => matchesCacheableEndpoint(urlString, endpoint))) {
             sessionStorage.setItem(urlString, JSON.stringify(data));
         }
         return data;
