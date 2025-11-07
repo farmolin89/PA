@@ -687,6 +687,28 @@ body::after {
   animation: gradientShift 2s ease infinite;
 }
 
+.test-card.pending {
+  border-color: var(--warning);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(245, 158, 11, 0.02));
+}
+
+.test-card.pending::before {
+  background: linear-gradient(to right, var(--warning), #f59e0b);
+  height: 6px;
+}
+
+.test-card.pending:hover::before {
+  height: 6px;
+  background: linear-gradient(90deg,
+    var(--warning) 0%,
+    #f59e0b 25%,
+    #fbbf24 50%,
+    #f59e0b 75%,
+    var(--warning) 100%);
+  background-size: 200% 100%;
+  animation: gradientShift 2s ease infinite;
+}
+
 @keyframes gradientShift {
   0% {
     background-position: 0% 50%;
@@ -762,6 +784,11 @@ body::after {
 .status-text.failed {
   background: var(--danger);
   color: white;
+}
+
+.status-text.pending {
+  background: var(--warning);
+  color: #7c2d12;
 }
 
 .correct-answers {

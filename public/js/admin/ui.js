@@ -8,12 +8,19 @@ let stickyToasts = [];
 /**
  * Показывает всплывающее уведомление (тост) с помощью библиотеки Toastify.
  * @param {string} message - Сообщение для отображения.
- * @param {'info'|'error'|'success'} [type='info'] - Тип уведомления, влияющий на его цвет.
+ * @param {'info'|'error'|'success'|'warning'} [type='info'] - Тип уведомления, влияющий на его цвет.
  * @param {number} [duration=5000] - Длительность показа в миллисекундах. Установите 0, чтобы сделать уведомление "липким".
  * @returns {object} Возвращает экземпляр Toastify для возможного программного управления (например, закрытия).
  */
 export function showToast(message, type = 'info', duration = 5000) {
-    const toastClass = type === 'error' ? 'toast-error' : (type === 'success' ? 'toast-success' : 'toast-info');
+    const toastClassByType = {
+        error: 'toast-error',
+        success: 'toast-success',
+        warning: 'toast-warning',
+        info: 'toast-info'
+    };
+
+    const toastClass = toastClassByType[type] || toastClassByType.info;
     
     const toastInstance = Toastify({
         text: message,
