@@ -79,67 +79,6 @@ table.admin-table tbody tr:hover {
 .status-label.status-pending { background-color: var(--warning); color: var(--dark); }
 
 
-.score-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.65rem;
-    border-radius: var(--border-radius);
-    background: linear-gradient(135deg, rgba(66, 153, 225, 0.12), rgba(66, 153, 225, 0.05));
-    color: var(--dark);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
-
-.score-badge::before {
-    content: '\f201';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    color: var(--primary);
-}
-
-.percentage-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 3.25rem;
-    padding: 0.3rem 0.75rem;
-    border-radius: 999px;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.01em;
-    background: var(--light);
-    color: var(--dark);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
-}
-
-.percentage-chip--lg {
-    font-size: 1.5rem;
-    padding: 0.5rem 1.5rem;
-    min-width: 5.5rem;
-}
-
-.percentage-chip--success {
-    background: rgba(56, 161, 105, 0.12);
-    color: var(--success);
-}
-
-.percentage-chip--danger {
-    background: rgba(229, 62, 62, 0.12);
-    color: var(--danger);
-}
-
-.percentage-chip--pending {
-    background: rgba(237, 137, 54, 0.14);
-    color: #b7791f;
-}
-
-.percentage-chip--neutral {
-    background: rgba(113, 128, 150, 0.12);
-    color: var(--gray);
-}
-
-
 /* Стили для кнопки "Удалить выбранные" */
 #deleteSelectedResultsBtn {
   opacity: 0;
