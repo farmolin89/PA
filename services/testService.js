@@ -235,8 +235,11 @@ module.exports = (db) => {
             const completedCount = Number(completedStatsRow.completedCount) || 0;
             const passedCount = Number(completedStatsRow.passedCount) || 0;
 
+            const totalAttemptsAllStatuses = Number(totalAttemptsRow.totalAttempts) || 0;
+
             const summaryStats = {
-                totalAttempts: Number(totalAttemptsRow.totalAttempts) || 0,
+                totalAttempts: completedCount,
+                totalAttemptsAllStatuses,
                 averagePercentage: completedCount > 0 && completedStatsRow.averagePercentage ? Math.round(completedStatsRow.averagePercentage) : 0,
                 passRate: completedCount > 0 ? Math.round((passedCount / completedCount) * 100) : 0,
             };
