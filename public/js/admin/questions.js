@@ -50,16 +50,13 @@ function renderQuestionsList(questions) {
     }
 
     const listHTML = questions.map((q, index) => `
-        <div class="question-item" data-id="${q.id}">
+        <div class="question-item" data-id="${q.id}" tabindex="0" role="button" aria-label="Редактировать вопрос ${index + 1}">
             <input type="checkbox" class="question-checkbox question-item-checkbox" data-id="${q.id}">
             <div class="question-text">
                 <span class="question-number">${index + 1}.</span>
                 ${escapeHTML(q.text)}
             </div>
             <div class="question-item-actions">
-                <button type="button" class="btn-icon edit" data-id="${q.id}" title="Редактировать">
-                    <i class="fas fa-pen"></i>
-                </button>
                 <button type="button" class="btn-icon delete" data-id="${q.id}" title="Удалить">
                     <i class="fas fa-trash-alt"></i>
                 </button>
@@ -348,10 +345,21 @@ export function initQuestionsModule(testId) {
         if (target.closest('#addQuestionBtn')) prepareAddQuestion();
         if (target.closest('#deleteSelectedQuestionsBtn')) confirmAndDeleteQuestions(Array.from(document.querySelectorAll('.question-item-checkbox:checked')).map(cb => cb.dataset.id));
         if (target.matches('.question-item-checkbox')) updateBulkActionsUI();
-        const editBtn = target.closest('.btn-icon.edit');
-        if (editBtn) prepareEditQuestion(editBtn.dataset.id);
         const deleteBtn = target.closest('.btn-icon.delete');
         if (deleteBtn) confirmAndDeleteQuestions([deleteBtn.dataset.id]);
+        const questionRow = target.closest('.question-item');
+        if (questionRow && !target.closest('.question-item-actions') && !target.closest('.question-checkbox')) {
+            prepareEditQuestion(questionRow.dataset.id);
+        }
+    });
+
+    container.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        if (e.target.matches('.question-checkbox, .btn-icon')) return;
+        const focusedRow = e.target.closest('.question-item');
+        if (!focusedRow) return;
+        e.preventDefault();
+        prepareEditQuestion(focusedRow.dataset.id);
     });
 
     loadQuestions();

@@ -98,13 +98,14 @@ function renderSummary(data) {
         distributionChartHtml = (scoreDistribution || []).map((bucket) => {
             if (!bucket || typeof bucket.count !== 'number' || typeof bucket.label !== 'string') return '';
 
-            const barHeight = (bucket.count / maxCount) * 100;
+            const hasAttempts = bucket.count > 0;
+            const normalizedHeight = hasAttempts ? Math.max((bucket.count / maxCount) * 100, 8) : 0;
             const labelText = bucket.label.includes('99') ? '90-100' : bucket.label.replace('-', '–');
-            
+
             return `
                 <div class="score-item" title="${bucket.count} ${pluralize(bucket.count, 'attempt')}">
                     <div class="score-bar">
-                        <div class="score-fill" style="height: ${barHeight}%;"></div>
+                        <div class="score-fill${hasAttempts ? ' has-data' : ''}" style="height: ${normalizedHeight}%;"></div>
                     </div>
                     <div class="score-value">${labelText}</div>
                 </div>
