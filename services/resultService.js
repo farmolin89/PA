@@ -31,15 +31,36 @@ module.exports = (db) => {
                 resultsQuery.where('fio', 'like', searchTerm);
             }
 
+            const allowedSortColumns = {
+                fio: 'fio',
+                score: 'score',
+                status: 'status',
+                percentage: 'percentage',
+                date: 'date'
+            };
+
+            const sortColumn = allowedSortColumns[sort] || 'date';
+            const sortDirection = order === 'asc' ? 'asc' : 'desc';
+
             // Выполняем запросы
             const totalResult = await totalQuery.count('id as count').first();
-            const totalCount = totalResult.count;
+            const totalCount = Number(totalResult.count) || 0;
+
+            if (sortColumn === 'status') {
+                const statusOrderExpression = `CASE status WHEN 'pending_review' THEN 0 WHEN 'completed' THEN 1 ELSE 2 END`;
+                resultsQuery
+                    .orderByRaw(`${statusOrderExpression} ${sortDirection === 'asc' ? 'ASC' : 'DESC'}`)
+                    .orderBy('date', 'desc');
+            } else {
+                resultsQuery
+                    .orderBy(sortColumn, sortDirection)
+                    .orderBy('date', 'desc');
+            }
 
             const results = await resultsQuery
-                .orderBy(sort || 'date', order || 'desc')
                 .limit(limitNum)
                 .offset(offset);
-            
+
             return {
                 results,
                 totalPages: Math.ceil(totalCount / limitNum),
