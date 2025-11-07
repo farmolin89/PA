@@ -21,24 +21,13 @@ const adminTestRoutes = require('./routes/admin-tests.routes')(knex);
 
 // --- Критические проверки безопасности при старте ---
 if (!process.env.SESSION_SECRET) {
-    if (process.env.NODE_ENV === 'test') {
-        process.env.SESSION_SECRET = 'test-session-secret';
-        console.warn('SESSION_SECRET отсутствует. Используется временное значение для тестовой среды.');
-    } else {
-        console.error('КРИТИЧЕСКАЯ ОШИБКА: Секретный ключ сессии (SESSION_SECRET) не определен в .env файле.');
-        process.exit(1);
-    }
+    console.error('КРИТИЧЕСКАЯ ОШИБКА: Секретный ключ сессии (SESSION_SECRET) не определен в .env файле.');
+    process.exit(1);
 }
-let csrfSecret = process.env.CSRF_SECRET;
+const csrfSecret = process.env.CSRF_SECRET;
 if (!csrfSecret || csrfSecret.length !== 32) {
-    if (process.env.NODE_ENV === 'test') {
-        csrfSecret = '12345678901234567890123456789012';
-        process.env.CSRF_SECRET = csrfSecret;
-        console.warn('CSRF_SECRET отсутствует или имеет неверную длину. Используется временное значение для тестовой среды.');
-    } else {
-        console.error('КРИТИЧЕСКАЯ ОШИБКА: Ключ CSRF_SECRET должен быть определен и иметь длину 32 символа.');
-        process.exit(1);
-    }
+    console.error('КРИТИЧЕСКАЯ ОШИБКА: Ключ CSRF_SECRET должен быть определен и иметь длину 32 символа.');
+    process.exit(1);
 }
 
 const app = express();
