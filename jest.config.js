@@ -16,10 +16,7 @@ module.exports = {
   // Эта настройка важна, чтобы он не лез в папку `public/js`.
   testMatch: [
     '**/__tests__/**/*.test.js',
-    '**/_test_/**/*.test.js',
   ],
-
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   
   // =================================================================
   // Мы убрали `transformIgnorePatterns` и `moduleNameMapper`,
