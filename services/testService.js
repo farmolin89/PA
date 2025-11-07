@@ -41,27 +41,52 @@ module.exports = (db) => {
                 .select(
                     'test_id',
                     db.raw('COUNT(id) as "attemptsCount"'),
-                    db.raw('CAST(COALESCE(ROUND(AVG(percentage)), 0) AS INTEGER) as "avgScore"'),
-                    db.raw('CAST(COALESCE(ROUND(SUM(CASE WHEN passed = true THEN 1 ELSE 0 END) * 100.0 / NULLIF(COUNT(id), 0)), 0) AS INTEGER) as "passRate"')
+                    db.raw("SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as \"completedCount\""),
+                    db.raw("SUM(CASE WHEN status = 'completed' AND passed = true THEN 1 ELSE 0 END) as \"passedCount\""),
+                    db.raw("SUM(CASE WHEN status = 'completed' THEN percentage ELSE 0 END) as \"sumPercentage\"")
                 )
                 .groupBy('test_id')
                 .as('r_stats');
 
-            const tests = await db('tests')
+            const testsRaw = await db('tests')
                 .leftJoin('test_settings', 'tests.id', 'test_settings.test_id')
                 .leftJoin(questionCounts, 'tests.id', 'q_counts.test_id')
                 .leftJoin(resultStats, 'tests.id', 'r_stats.test_id')
                 .select(
                     'tests.id', 'tests.name', 'tests.is_active',
                     'test_settings.duration_minutes',
+                    'test_settings.questions_per_test',
+                    'test_settings.passing_score',
                     db.raw('COALESCE(q_counts.questions_count, 0) as questions_count'),
                     db.raw('COALESCE(r_stats."attemptsCount", 0) as "attemptsCount"'),
-                    db.raw('COALESCE(r_stats."avgScore", 0) as "avgScore"'),
-                    db.raw('COALESCE(r_stats."passRate", 0) as "passRate"')
+                    db.raw('COALESCE(r_stats."completedCount", 0) as "completedCount"'),
+                    db.raw('COALESCE(r_stats."passedCount", 0) as "passedCount"'),
+                    db.raw('COALESCE(r_stats."sumPercentage", 0) as "sumPercentage"')
                 )
                 .orderBy('tests.created_at', 'desc');
 
-            return tests;
+            return testsRaw.map(test => {
+                const attemptsCount = Number(test.attemptsCount) || 0;
+                const completedCount = Number(test.completedCount) || 0;
+                const passedCount = Number(test.passedCount) || 0;
+                const sumPercentage = Number(test.sumPercentage) || 0;
+
+                const avgScore = completedCount > 0 ? Math.round(sumPercentage / completedCount) : 0;
+                const passRate = completedCount > 0 ? Math.round((passedCount / completedCount) * 100) : 0;
+
+                return {
+                    id: test.id,
+                    name: test.name,
+                    is_active: !!test.is_active,
+                    duration_minutes: Number(test.duration_minutes) || 0,
+                    questions_count: Number(test.questions_count) || 0,
+                    questions_per_test: Number(test.questions_per_test) || 0,
+                    passing_score: Number(test.passing_score) || 0,
+                    attemptsCount,
+                    avgScore,
+                    passRate,
+                };
+            });
         },
 
         /**
@@ -195,22 +220,32 @@ module.exports = (db) => {
          * Собирает детальную аналитику для вкладки "Сводка" конкретного теста.
          */
         getTestAnalytics: async (testId) => {
-            const summaryStatsRes = await db('results')
+            const totalAttemptsRow = await db('results')
                 .where({ test_id: testId })
                 .count('id as totalAttempts')
+                .first() || { totalAttempts: 0 };
+
+            const completedStatsRow = await db('results')
+                .where({ test_id: testId, status: 'completed' })
+                .count('id as completedCount')
                 .avg('percentage as averagePercentage')
                 .sum({ passedCount: db.raw('CASE WHEN passed = true THEN 1 ELSE 0 END') })
-                .first();
-            
+                .first() || { completedCount: 0, averagePercentage: null, passedCount: 0 };
+
+            const completedCount = Number(completedStatsRow.completedCount) || 0;
+            const passedCount = Number(completedStatsRow.passedCount) || 0;
+
             const summaryStats = {
-                totalAttempts: Number(summaryStatsRes.totalAttempts),
-                averagePercentage: summaryStatsRes.averagePercentage ? Math.round(summaryStatsRes.averagePercentage) : 0,
-                passRate: Number(summaryStatsRes.totalAttempts) > 0 ? Math.round((Number(summaryStatsRes.passedCount) / Number(summaryStatsRes.totalAttempts)) * 100) : 0,
+                totalAttempts: Number(totalAttemptsRow.totalAttempts) || 0,
+                averagePercentage: completedCount > 0 && completedStatsRow.averagePercentage ? Math.round(completedStatsRow.averagePercentage) : 0,
+                passRate: completedCount > 0 ? Math.round((passedCount / completedCount) * 100) : 0,
             };
 
-            const mostDifficultQuestions = await db('answers')
+            const mostDifficultQuestionsRaw = await db('answers')
+                .join('results', 'answers.result_id', 'results.id')
                 .join('questions', 'answers.question_id', 'questions.id')
                 .where('questions.test_id', testId)
+                .andWhere('results.status', 'completed')
                 .select('questions.text')
                 .count('answers.id as totalAnswers')
                 .sum({ correctAnswers: db.raw('CASE WHEN answers.is_correct = true THEN 1 ELSE 0 END')})
@@ -218,31 +253,41 @@ module.exports = (db) => {
                 .orderByRaw('CAST(correctAnswers AS REAL) / totalAnswers ASC')
                 .limit(5);
 
-            const topPerformers = await db('results')
-                .where({ test_id: testId })
+            const mostDifficultQuestions = mostDifficultQuestionsRaw.map(question => ({
+                text: question.text,
+                totalAnswers: Number(question.totalAnswers) || 0,
+                correctAnswers: Number(question.correctAnswers) || 0,
+            }));
+
+            const topPerformers = (await db('results')
+                .where({ test_id: testId, status: 'completed' })
                 .select('fio', 'percentage as maxPercentage')
                 .orderBy('percentage', 'desc')
-                .limit(5);
+                .limit(5))
+                .map(row => ({ fio: row.fio, maxPercentage: Number(row.maxPercentage) || 0 }));
 
-            const worstPerformers = await db('results')
-                .where({ test_id: testId })
+            const worstPerformers = (await db('results')
+                .where({ test_id: testId, status: 'completed' })
                 .select('fio', 'percentage as minPercentage')
                 .orderBy('percentage', 'asc')
-                .limit(5);
+                .limit(5))
+                .map(row => ({ fio: row.fio, minPercentage: Number(row.minPercentage) || 0 }));
 
             const scoreDistributionRaw = await db('results')
-                .where({ test_id: testId })
-                .select(db.raw("CAST(FLOOR(percentage / 10) * 10 AS INTEGER) as bucket"))
+                .where({ test_id: testId, status: 'completed' })
+                .select(db.raw("MIN(CAST(percentage / 10 AS INTEGER) * 10, 90) as bucket"))
                 .count('id as count')
                 .groupBy('bucket');
 
-            const scoreDistributionMap = new Map(scoreDistributionRaw.map(item => [item.bucket, item.count]));
+            const scoreDistributionMap = new Map(
+                scoreDistributionRaw.map(item => [Number(item.bucket), Number(item.count)])
+            );
             const scoreDistribution = Array.from({ length: 10 }, (_, i) => {
                 const bucketStart = i * 10;
                 const bucketEnd = bucketStart + 9;
                 return {
                     label: `${bucketStart}-${bucketEnd === 99 ? '100' : bucketEnd}`,
-                    count: scoreDistributionMap.get(bucketStart) || 0,
+                    count: Number(scoreDistributionMap.get(bucketStart) || 0),
                 };
             });
 
@@ -260,7 +305,8 @@ module.exports = (db) => {
          */
         getTestingSummary: async () => {
             const summary = await db('results')
-                .count('id as passedTests')
+                .where({ status: 'completed' })
+                .sum({ passedTests: db.raw('CASE WHEN passed = true THEN 1 ELSE 0 END') })
                 .avg('percentage as avgResult')
                 .first();
 
