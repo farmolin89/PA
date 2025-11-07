@@ -42,6 +42,7 @@
     border-radius: var(--border-radius);
     transition: var(--transition);
     background-color: white;
+    cursor: pointer;
 }
 
 .question-item:hover {
@@ -50,11 +51,17 @@
     transform: translateY(-2px);
 }
 
+.question-item:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 .question-checkbox {
     margin: 0;
     width: 1.15rem;
     height: 1.15rem;
     flex-shrink: 0;
+    cursor: pointer;
 }
 
 .question-number {
@@ -92,10 +99,6 @@
 
 .question-item-actions .btn-icon:hover {
     background-color: var(--gray-light);
-}
-
-.question-item-actions .btn-icon.edit:hover {
-    color: var(--primary);
 }
 
 .question-item-actions .btn-icon.delete:hover {

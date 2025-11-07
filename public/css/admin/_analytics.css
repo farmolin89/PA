@@ -118,16 +118,18 @@
     align-items: flex-end;
     height: 150px;
     margin-top: 1rem;
+    gap: 0.75rem;
 }
 .score-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1;
+    height: 100%;
 }
 .score-bar {
-    width: 50%;
-    height: 100%;
+    width: 55%;
+    flex: 1;
     background-color: var(--light);
     border-radius: 4px 4px 0 0;
     display: flex;
@@ -138,6 +140,9 @@
     background-color: var(--primary);
     border-radius: 4px 4px 0 0;
     transition: height 0.5s ease;
+}
+.score-fill.has-data {
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
 }
 .score-value {
     margin-top: 0.5rem;

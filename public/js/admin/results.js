@@ -20,6 +20,59 @@ let selectedResultIds = new Set();
 const RESULTS_PER_PAGE = 10;
 let reviewClickHandler;
 
+const DATE_TIME_FORMAT_OPTIONS = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+};
+
+function formatDateTime(dateInput) {
+    if (!dateInput) return '—';
+    const date = new Date(dateInput);
+    if (Number.isNaN(date.getTime())) return '—';
+    return date.toLocaleString('ru-RU', DATE_TIME_FORMAT_OPTIONS);
+}
+
+function getStatusMeta(status, passed) {
+    if (status === 'pending_review') {
+        return { statusClass: 'status-pending', statusText: 'На проверке' };
+    }
+    if (passed) {
+        return { statusClass: 'status-pass', statusText: 'СДАН' };
+    }
+    return { statusClass: 'status-fail', statusText: 'НЕ СДАН' };
+}
+
+function buildPercentageChip(value, { status, passed }, size = 'md') {
+    const numericValue = Number.isFinite(Number(value)) ? Math.round(Number(value)) : 0;
+    let variant = 'neutral';
+    if (status === 'pending_review') {
+        variant = 'pending';
+    } else if (passed === true) {
+        variant = 'success';
+    } else if (passed === false) {
+        variant = 'danger';
+    }
+    const sizeClass = size === 'lg' ? 'percentage-chip--lg' : '';
+    return `<span class="percentage-chip ${sizeClass} percentage-chip--${variant}">${numericValue}%</span>`;
+}
+
+function buildMatchList(prompts = [], answers = []) {
+    if (!prompts.length) {
+        return '<div class="protocol-answer-text">—</div>';
+    }
+    const items = prompts.map((prompt, index) => `
+        <li>
+            <span class="match-prompt">${escapeHTML(prompt)}</span>
+            <span class="match-separator">→</span>
+            <span class="match-answer">${escapeHTML(answers[index] || '—')}</span>
+        </li>
+    `).join('');
+    return `<ul class="protocol-match-list">${items}</ul>`;
+}
+
 /**
  * Обрабатывает поступление нового результата в реальном времени от SSE.
  */
@@ -115,15 +168,7 @@ function renderResultsTable(results) {
         </thead>`;
 
     const tableBody = results.map(result => {
-        let statusClass, statusText;
-        if (result.status === 'pending_review') {
-            statusClass = 'status-pending';
-            statusText = 'На проверке';
-        } else {
-            statusClass = result.passed ? 'status-pass' : 'status-fail';
-            statusText = result.passed ? 'СДАН' : 'НЕ СДАН';
-        }
-        
+        const { statusClass, statusText } = getStatusMeta(result.status, result.passed);
         const rowClass = result.status === 'pending_review' ? 'needs-review' : '';
         const rowTitle = result.status === 'pending_review' ? "Нажмите для ручной проверки" : "Нажмите для просмотра протокола";
 
@@ -131,10 +176,10 @@ function renderResultsTable(results) {
             <tr data-id="${result.id}" data-fio="${escapeHTML(result.fio)}" class="${rowClass}" style="cursor: pointer;" title="${rowTitle}">
                 <td><input type="checkbox" class="result-checkbox" data-id="${result.id}"></td>
                 <td>${escapeHTML(result.fio)}</td>
-                <td>${result.score}/${result.total}</td>
+                <td><span class="score-badge">${result.score}/${result.total}</span></td>
                 <td><span class="status-label ${statusClass}">${statusText}</span></td>
-                <td>${result.percentage}%</td>
-                <td>${new Date(result.date).toLocaleString('ru-RU')}</td>
+                <td>${buildPercentageChip(result.percentage, result)}</td>
+                <td>${formatDateTime(result.date)}</td>
                 <td class="actions-cell">
                     <button type="button" class="btn-icon delete" data-id="${result.id}" title="Удалить"><i class="fas fa-trash-alt"></i></button>
                 </td>
@@ -243,30 +288,68 @@ async function showProtocolModal(resultId, fio) {
     contentEl.innerHTML = '<div class="spinner"></div>';
     try {
         const { summary, protocol: protocolData } = await fetchProtocol(resultId);
-        const statusClass = summary.passed ? 'status-pass' : 'status-fail';
-        const statusText = summary.passed ? 'СДАН' : 'НЕ СДАН';
+        const { statusClass, statusText } = getStatusMeta(summary.status, summary.passed);
         titleEl.innerHTML = `Протокол теста: ${escapeHTML(fio)} <span class="protocol-status ${statusClass}">${statusText}</span>`;
         if (!protocolData || protocolData.length === 0) {
             contentEl.innerHTML = '<p class="empty-state-message">Детальная информация для этого теста недоступна.</p>';
             return;
         }
-        let protocolHTML = protocolData.map((item) => {
+        const summaryHTML = `
+            <section class="protocol-summary">
+                <div class="protocol-summary-item">
+                    <span class="protocol-summary-label">Дата и время</span>
+                    <span class="protocol-summary-value">${formatDateTime(summary.date)}</span>
+                </div>
+                <div class="protocol-summary-item">
+                    <span class="protocol-summary-label">Результат</span>
+                    <span class="protocol-summary-value score-badge">${summary.score}/${summary.total}</span>
+                </div>
+                <div class="protocol-summary-item">
+                    <span class="protocol-summary-label">Процент</span>
+                    ${buildPercentageChip(summary.percentage, summary, 'lg')}
+                </div>
+                <div class="protocol-summary-item">
+                    <span class="protocol-summary-label">Статус</span>
+                    <span class="protocol-summary-value status-label ${statusClass}">${statusText}</span>
+                </div>
+            </section>`;
+
+        const protocolHTML = protocolData.map((item, index) => {
             const itemClass = item.isCorrect ? 'correct' : 'incorrect';
-            const chosenAnswer = item.type === 'match'
-                ? '<ul>' + item.match_prompts.map((p, i) => `<li>${escapeHTML(p)} &rarr; ${escapeHTML(item.chosen_answers_match[i] || '—')}</li>`).join('') + '</ul>'
-                : escapeHTML(item.chosenAnswerText);
-            const correctAnswer = item.type === 'match'
-                ? '<ul>' + item.match_prompts.map((p, i) => `<li>${escapeHTML(p)} &rarr; ${escapeHTML(item.correct_answers_match[i] || '—')}</li>`).join('') + '</ul>'
-                : escapeHTML(item.correctAnswerText);
-            return `<div class="protocol-item ${itemClass}">
-                        <div class="protocol-item-header"><span>${escapeHTML(item.questionText)}</span></div>
-                        <div class="protocol-item-body">
-                            <div class="protocol-answer-block"><div class="answer-label user-answer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Ваш ответ</div><div class="answer-text">${chosenAnswer}</div></div>
-                            <div class="protocol-answer-block"><div class="answer-label correct-answer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Правильный ответ</div><div class="answer-text">${correctAnswer}</div></div>
+            const answerStatusClass = item.isCorrect ? 'protocol-answer-status--correct' : 'protocol-answer-status--incorrect';
+            const verdictLabel = item.isCorrect ? 'Верно' : 'Ошибка';
+            const explanation = item.explanation ? `<p class="protocol-question-note">${escapeHTML(item.explanation)}</p>` : '';
+            const userAnswerContent = item.type === 'match'
+                ? buildMatchList(item.match_prompts, item.chosen_answers_match)
+                : `<div class="protocol-answer-text">${escapeHTML(item.chosenAnswerText || '—')}</div>`;
+            const correctAnswerContent = item.type === 'match'
+                ? buildMatchList(item.match_prompts, item.correct_answers_match)
+                : `<div class="protocol-answer-text">${escapeHTML(item.correctAnswerText || '—')}</div>`;
+
+            return `
+                <article class="protocol-item ${itemClass}">
+                    <header class="protocol-item-header">
+                        <span class="protocol-question-index">${index + 1}</span>
+                        <div class="protocol-question-meta">
+                            <h4 class="protocol-question-text">${escapeHTML(item.questionText)}</h4>
+                            ${explanation}
                         </div>
-                    </div>`;
+                        <span class="protocol-answer-status ${answerStatusClass}">${verdictLabel}</span>
+                    </header>
+                    <div class="protocol-item-body">
+                        <div class="protocol-answer-block">
+                            <span class="answer-label user-answer">Ответ участника</span>
+                            ${userAnswerContent}
+                        </div>
+                        <div class="protocol-answer-block">
+                            <span class="answer-label correct-answer">Правильный ответ</span>
+                            ${correctAnswerContent}
+                        </div>
+                    </div>
+                </article>`;
         }).join('');
-        contentEl.innerHTML = protocolHTML;
+
+        contentEl.innerHTML = `${summaryHTML}<section class="protocol-items">${protocolHTML}</section>`;
     } catch (error) {
         contentEl.innerHTML = `<p class="error-message">Не удалось загрузить протокол.</p>`;
         console.error("Ошибка загрузки протокола:", error);
