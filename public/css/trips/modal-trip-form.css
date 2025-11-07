@@ -1,0 +1,235 @@
+/* --- ADD/EDIT TRIP MODAL STYLES --- */
+#trip-modal .form-section {
+    margin-bottom: 25px;
+}
+
+#trip-modal .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#trip-modal .section-title i {
+    margin-right: 10px;
+}
+
+#trip-modal label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #334155;
+    font-size: 14px;
+}
+
+#trip-modal .employees-container {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    background-color: white;
+}
+
+#trip-modal .employees-container.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+    background-color: #f8fafc;
+}
+
+#trip-modal .employee-item {
+    padding: 10px 12px;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+}
+
+#trip-modal .employee-item:last-child {
+    margin-bottom: 0;
+}
+
+#trip-modal .employee-item:hover {
+    background-color: #f8fafc;
+}
+
+#trip-modal .employee-item.selected {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+#trip-modal .employee-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-weight: 500;
+    margin-right: 12px;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+#trip-modal .hint {
+    font-size: 13px;
+    color: #64748b;
+}
+
+#trip-modal .search-container {
+    position: relative;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.2s;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+#trip-modal .search-container input[type="text"] {
+    width: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    font-size: inherit;
+    font-family: inherit;
+    outline: none;
+}
+
+#trip-modal input[type="text"]:not(#organization-search),
+#trip-modal input[type="date"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.2s;
+    background-color: white;
+}
+
+#trip-modal .search-container:focus-within,
+#trip-modal input[type="text"]:focus,
+#trip-modal input[type="date"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transition: all 0.2s ease;
+}
+
+#trip-modal .date-fields {
+    display: flex;
+    gap: 15px;
+}
+
+#trip-modal .date-field {
+    flex: 1;
+}
+
+#trip-modal .counter {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+#trip-modal .error {
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 5px;
+    display: none;
+}
+
+#trip-modal .organization-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+#trip-modal .organization-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color: 0.2s;
+    font-size: 14px;
+}
+
+#trip-modal .organization-option:hover {
+    background-color: #f8fafc;
+}
+
+#trip-modal .form-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* --- Стили для выбора транспорта --- */
+.transport-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.transport-option {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transport-option i {
+    font-size: 18px;
+    color: #64748b;
+    transition: color 0.2s ease;
+}
+
+.transport-option:hover {
+    border-color: #94a3b8;
+}
+
+.transport-option.active {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.transport-option.active i {
+    color: #3b82f6;
+}
+
+@media (max-width: 768px) {
+    #trip-modal .btn {
+        flex: 1;
+        justify-content: center;
+    }
+}

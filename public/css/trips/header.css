@@ -1,0 +1,181 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/trips/header.css (ФИНАЛЬНАЯ ВЕРСИЯ 5.0)           */
+/* ОПИСАНИЕ: Стили для шапки раздела командировок с иконкой выхода     */
+/* ОСОБЕННОСТЬ: Замена кнопки "Назад" на иконку выхода на дашборд     */
+/* =================================================================== */
+
+/* ==================== CSS ПЕРЕМЕННЫЕ ==================== */
+:root {
+    --glass-effect: rgba(255, 255, 255, 0.85);
+}
+
+/* ==================== ОСНОВНАЯ ШАПКА ==================== */
+header.new-header {
+    /* Flex-разметка */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    /* Отступы и позиционирование */
+    margin-bottom: 24px;
+    padding: 20px 0;
+}
+
+/* ==================== КОМПОНЕНТ ЛОГОТИПА ==================== */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo-icon {
+    /* Размеры и форма */
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    
+    /* Градиентный фон */
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    
+    /* Центрирование содержимого */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Типография */
+    color: white;
+    font-size: 1.8rem;
+    
+    /* Эффекты и анимации */
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+    transition: var(--transition);
+}
+
+.logo:hover .logo-icon {
+    transform: rotate(10deg) scale(1.05);
+}
+
+.logo-text h1 {
+    /* Типография */
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0;
+    
+    /* Градиентный текст */
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text p {
+    color: var(--gray);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* ==================== ДЕЙСТВИЯ ПОЛЬЗОВАТЕЛЯ ==================== */
+.user-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* ==================== ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ ==================== */
+.user-profile {
+    /* Flex-разметка */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    /* Размеры и отступы */
+    padding: 10px 20px;
+    border-radius: 50px;
+    
+    /* Стили glass-эффекта */
+    background: var(--glass-effect);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    
+    /* Эффекты и тени */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+    
+    /* Интерактивность */
+    cursor: pointer;
+}
+
+.user-profile:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar {
+    /* Размеры и форма */
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    
+    /* Градиентный фон */
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    
+    /* Центрирование содержимого */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Типография */
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.user-role {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+/* ==================== ИКОНКА ВЫХОДА/НАЗАД ==================== */
+.logout-button {
+    /* Разметка и позиционирование */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Размеры и форма */
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    
+    /* Стили glass-эффекта */
+    background: var(--glass-effect);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    
+    /* Типография */
+    color: var(--gray);
+    font-size: 20px;
+    text-decoration: none;
+    
+    /* Эффекты и тени */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+}
+
+.logout-button:hover {
+    color: var(--primary);
+    background: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}

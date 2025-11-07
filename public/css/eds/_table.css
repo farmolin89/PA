@@ -1,0 +1,97 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/eds/_table.css                                   */
+/* ОПИСАНИЕ: Стили для таблицы с данными ЭЦП                         */
+/* =================================================================== */
+
+/* ==================== 6) ТАБЛИЦА ЭЦП (#ECPTABLE) ==================== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#ecpTable thead {
+    background: var(--light);
+}
+
+#ecpTable th {
+    /* Позиционирование */
+    position: sticky;
+    top: 0;
+    
+    /* Размеры и отступы */
+    padding: 20px 16px;
+    
+    /* Типография */
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--dark);
+    
+    /* Границы и фон */
+    background: var(--light);
+    border-bottom: 2px solid var(--gray-light);
+    
+    /* Интерактивность */
+    user-select: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#ecpTable th[data-sort="fio"] {
+    text-align: left;
+}
+
+#ecpTable th:not(:last-child) {
+    border-right: 1px solid var(--gray-light);
+}
+
+#ecpTable th:hover {
+    background: #f1f5f9;
+}
+
+#ecpTable th.sorted-asc::after {
+    content: " ▲";
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+#ecpTable th.sorted-desc::after {
+    content: " ▼";
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+#ecpTable td {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--gray-light);
+    vertical-align: middle; /* <-- ИЗМЕНЕНИЕ: Добавлено для вертикального выравнивания */
+}
+
+#ecpTable tbody tr {
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#ecpTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#ecpTable tbody tr:hover {
+    background: rgba(37, 99, 235, 0.03);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Связанные вспомогательные классы */
+.table-sortable tbody,
+.table-sortable tbody tr {
+    transition: all 0.5s ease;
+}
+
+/* ИЗМЕНЕНИЕ: Добавлены стили для управления шириной колонки "Должность" */
+#ecpTable th:nth-child(2),
+#ecpTable td:nth-child(2) {
+    width: 150px;       /* Устанавливаем ширину, чтобы текст переносился */
+    min-width: 150px;   /* Гарантируем минимальную ширину */
+}

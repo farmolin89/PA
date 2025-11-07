@@ -1,0 +1,272 @@
+/* --- TRIP TOOLTIP STYLES --- */
+.tooltip-modern {
+    position: fixed;
+    z-index: 1100;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    max-width: 260px;
+    border: 1px solid #f1f5f9;
+}
+
+.modern-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.location-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--secondary);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    color: white;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.modern-title {
+    flex: 1;
+}
+
+.modern-title h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #2d3748;
+    line-height: 1.2;
+}
+
+.modern-title .subtitle {
+    font-size: 11px;
+    color: #718096;
+    margin-top: 1px;
+}
+
+.modern-status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.modern-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.modern-item {
+    text-align: center;
+    padding: 6px;
+    background: #f8fafc;
+    border-radius: 6px;
+}
+
+.modern-label {
+    font-size: 10px;
+    color: #718096;
+    margin-bottom: 2px;
+}
+
+.modern-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.modern-organization {
+    grid-column: span 2;
+    background: #f0fff4;
+    border: 1px solid #c6f6d5;
+    padding: 8px;
+}
+
+.modern-partner {
+    grid-column: span 2;
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    text-align: left;
+    padding: 8px;
+}
+
+.partner-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.partner-avatar {
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, #ed8936, #dd6b20);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.partner-details {
+    flex: 1;
+}
+
+.partner-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1px;
+}
+
+.partner-position {
+    font-size: 9px;
+    color: #718096;
+}
+
+.modern-duration {
+    grid-column: span 2;
+    background: #ebf8ff;
+    border: 1px dashed #bee3f8;
+    padding: 8px;
+}
+
+.modern-duration .modern-value {
+    color: #3182ce;
+    font-size: 12px;
+}
+
+.modern-status.status-in-progress { background: #e6fffa; color: #2c7a7b; }
+.modern-status.status-pending { background: #fffbeb; color: #b45309; }
+.modern-status.status-completed { background: #f1f5f9; color: #475569; }
+
+/* --- LEVEL SYSTEM TOOLTIP STYLES --- */
+#levels-tooltip {
+    position: fixed;
+    z-index: 1100;
+    pointer-events: none;
+    width: 340px; 
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    /* Анимация появления */
+    animation: fadeIn 0.2s ease-out;
+}
+
+#levels-tooltip .tooltip-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#levels-tooltip .tooltip-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+#levels-tooltip .level {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#levels-tooltip .level:not(:last-child) {
+  border-bottom: 1px solid #f8f8f8;
+}
+
+#levels-tooltip .icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 8px;
+    color: white;
+    flex-shrink: 0;
+}
+
+#levels-tooltip .level-1 .icon { background: #3b82f6; }
+#levels-tooltip .level-2 .icon { background: #10b981; }
+#levels-tooltip .level-3 .icon { background: #f59e0b; }
+#levels-tooltip .level-4 .icon { background: #f97316; }
+#levels-tooltip .level-5 .icon { background: #ef4444; }
+
+#levels-tooltip .content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#levels-tooltip .name {
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#levels-tooltip .days {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+    background-color: #f8fafc;
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap; 
+}
+
+#levels-tooltip .level-1 .name { color: #3b82f6; }
+#levels-tooltip .level-2 .name { color: #10b981; }
+#levels-tooltip .level-3 .name { color: #f59e0b; }
+#levels-tooltip .level-4 .name { color: #f97316; }
+#levels-tooltip .level-5 .name { color: #ef4444; }
+
+/* --- Стили для иконки транспорта в тултипе --- */
+.tooltip-transport-icon {
+    margin-right: 6px;
+    opacity: 0.7;
+    display: inline-block; /* Для корректного отступа */
+}
+
+/* --- Простой тултип для кнопок и иконок --- */
+.simple-tooltip {
+    position: fixed;
+    z-index: 1100; /* Выше чем модальные окна */
+    pointer-events: none; /* Чтобы тултип не мешал кликам */
+    background-color: var(--dark); /* Используем темный цвет из палитры */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap; /* Текст всегда в одну строку */
+    
+    /* Начальное (скрытое) состояние */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px); /* Небольшой сдвиг для анимации появления */
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.simple-tooltip.visible {
+    /* Видимое состояние */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}

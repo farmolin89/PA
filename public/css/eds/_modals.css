@@ -1,0 +1,193 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/eds/_modals.css                                  */
+/* ОПИСАНИЕ: Стили для модальных окон, форм и оверлеев                */
+/* =================================================================== */
+
+/* ==================== 9) МОДАЛЬНЫЕ ОКНА ==================== */
+.modal {
+    /* Позиционирование */
+    position: fixed;
+    inset: 0;
+    
+    /* Flex-разметка */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    
+    /* Размеры и отступы */
+    padding: 20px;
+    z-index: 1000;
+    
+    /* Фон и анимации */
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 700px;
+    border-radius: var(--border-radius);
+    background: #fff;
+    box-shadow: var(--box-shadow-lg);
+}
+
+.modal-header {
+    /* Flex-разметка */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    /* Отступы */
+    padding: 20px 32px; /* <-- ИЗМЕНЕНИЕ: Уменьшили вертикальные отступы с 28px до 20px */
+    
+    /* Визуальное оформление */
+    color: #fff;
+    background: var(--gradient-primary);
+}
+
+.modal-header h2 {
+    font-size: 1.4rem; /* <-- ИЗМЕНЕНИЕ: Уменьшили размер шрифта с 1.6rem до 1.4rem */
+    font-weight: 600;
+}
+
+.close-btn {
+    /* Центрирование содержимого */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Размеры и форма */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    
+    /* Типография */
+    font-size: 1.5rem;
+    color: #fff;
+    
+    /* Стили и интерактивность */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    padding: 32px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.form-control {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid var(--gray-light);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.95rem;
+    background: #fff;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 20px 32px; /* <-- ИЗМЕНЕНИЕ: Уменьшили вертикальные отступы с 28px до 20px */
+    background: var(--light);
+}
+
+.modal-overlay {
+    /* Позиционирование */
+    position: fixed;
+    inset: 0;
+    
+    /* Flex-разметка */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Визуальное оформление */
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-dialog {
+    width: 90%;
+    max-width: 500px;
+    padding: 32px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    background: #fff;
+    box-shadow: var(--box-shadow-lg);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.visible .modal-dialog {
+    transform: scale(1);
+}
+
+.modal-title {
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.modal-dialog .modal-body {
+    margin-bottom: 24px;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--gray);
+    max-height: none;
+    overflow-y: visible;
+}
+
+.modal-dialog .modal-footer {
+    padding: 0;
+    background: none;
+}

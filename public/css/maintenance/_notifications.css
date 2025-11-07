@@ -1,0 +1,82 @@
+/*
+ * ==========================================================================
+ *  Модуль стилей для всплывающих уведомлений (Notifications/Toasts)
+ * ==========================================================================
+ */
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.notification {
+    padding: 16px 20px;
+    border-radius: 12px;
+    color: var(--white);
+    font-weight: 600;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 350px;
+}
+
+.notification:before {
+    font-size: 20px;
+}
+
+.notification.success {
+    background: linear-gradient(135deg, var(--success-color) 0%, #0da271 100%);
+}
+
+.notification.success:before {
+    content: "✓";
+}
+
+.notification.error {
+    background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);
+}
+
+.notification.error:before {
+    content: "✕";
+}
+
+.notification.deleted {
+    background: linear-gradient(135deg, var(--text-light) 0%, #4b5563 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification.deleted:before {
+    content: "🗑️";
+}
+
+.undo-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.undo-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.notification.exit {
+    opacity: 0;
+    transform: translateX(120%);
+}

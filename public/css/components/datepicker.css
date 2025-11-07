@@ -1,0 +1,281 @@
+/* ===================================================================
+// Файл: public/css/components/datepicker.css (ФИНАЛЬНАЯ ВЕРСИЯ)
+// Содержит все стили для кастомного компонента выбора даты.
+// Версия 3.0: Добавлены flex-стили для ровных колонок в month/year view.
+// =================================================================== */
+
+:root {
+    --input-border-color: #ced4da;
+    --input-bg: #ffffff;
+    --input-text-color: #212529;
+    --input-focus-border: #86b7fe;
+    --input-focus-shadow: rgba(13, 110, 253, 0.25);
+    --text-color-muted: #6c757d;
+    --link-color: #0d6efd;
+    --dp-bg: #ffffff;
+    --dp-border: #dee2e6;
+    --dp-text: #212529;
+    --dp-text-muted: #6c757d;
+    --dp-hover-bg: #f8f9fa;
+    --dp-selected-bg: #0d6efd;
+    --dp-selected-text: #ffffff;
+    --dp-today-border: #0d6efd;
+    --dp-weekend-fg: #dc3545;
+}
+
+/* Стили для поля ввода и иконки */
+.calendar-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.calendar-wrapper .datepicker-input {
+    width: 100%;
+    padding: 12px 2.5rem 12px 16px;
+    border: 1px solid var(--border, var(--input-border-color));
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-wrapper .datepicker-input:focus {
+    outline: none;
+    border-color: var(--primary, var(--input-focus-border));
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.calendar-wrapper .calendar-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-color-muted);
+    cursor: pointer;
+    pointer-events: all;
+    transition: color 0.2s ease;
+    line-height: 1;
+}
+
+.calendar-wrapper .calendar-icon:hover {
+    color: var(--link-color);
+}
+
+/* Главный контейнер (портал), который добавляется в <body> */
+.datepicker-portal {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    pointer-events: none;
+    display: none;
+}
+
+.datepicker-portal[aria-hidden="false"] {
+    display: block;
+    pointer-events: auto;
+}
+
+.datepicker-backdrop {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    cursor: default;
+}
+
+/* Панель самого календаря */
+.datepicker-portal .datepicker-panel {
+    position: fixed;
+    background: var(--dp-bg);
+    border: 1px solid var(--dp-border);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: 0.75rem;
+    min-width: 280px;
+    max-width: 320px;
+    color: var(--dp-text);
+    pointer-events: auto;
+    transform-origin: top left;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: scale(0.95);
+    z-index: 4001;
+}
+
+.datepicker-portal[aria-hidden="false"] .datepicker-panel {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Усиленные стили для защиты от переопределения */
+.datepicker-portal .datepicker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--dp-border);
+}
+
+.datepicker-portal .datepicker-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: var(--dp-text-muted);
+    transition: background-color 0.2s ease, color 0.2s ease;
+    line-height: 1;
+}
+
+.datepicker-portal .datepicker-btn:hover {
+    background-color: var(--dp-hover-bg);
+    color: var(--dp-text);
+}
+
+.datepicker-portal .datepicker-caption {
+    font-weight: 600;
+    text-align: center;
+    flex-grow: 1;
+    padding: 0 0.5rem;
+}
+
+.datepicker-portal .datepicker-caption .month-label,
+.datepicker-portal .datepicker-caption .year-label {
+    padding: 0.15rem 0.3rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.15s ease;
+    cursor: pointer;
+}
+
+.datepicker-portal .datepicker-caption .month-label:hover,
+.datepicker-portal .datepicker-caption .year-label:hover {
+    background-color: var(--dp-hover-bg);
+}
+
+.datepicker-portal .datepicker-grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.datepicker-portal .datepicker-grid th {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--dp-text-muted);
+    text-transform: uppercase;
+    padding-bottom: 0.5rem;
+    text-align: center;
+    width: calc(100% / 7);
+}
+
+.datepicker-portal .datepicker-grid td {
+    text-align: center;
+    padding: 1px;
+}
+
+.datepicker-portal .datepicker-day,
+.datepicker-portal .datepicker-month,
+.datepicker-portal .datepicker-year {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    background: none;
+    color: var(--dp-text);
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.datepicker-portal .datepicker-day {
+    width: 2.1rem;
+    height: 2.1rem;
+}
+.datepicker-portal .datepicker-month,
+.datepicker-portal .datepicker-year {
+    width: 4.5rem;
+    height: 2.2rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.datepicker-portal .datepicker-day:hover:not(:disabled),
+.datepicker-portal .datepicker-month:hover,
+.datepicker-portal .datepicker-year:hover {
+    background-color: var(--dp-hover-bg);
+}
+
+.datepicker-portal .datepicker-day:focus,
+.datepicker-portal .datepicker-month:focus,
+.datepicker-portal .datepicker-year:focus {
+    outline: none;
+    border-color: var(--dp-selected-bg);
+}
+
+.datepicker-portal .datepicker-day.selected,
+.datepicker-portal .datepicker-month.active,
+.datepicker-portal .datepicker-year.active {
+    background-color: var(--dp-selected-bg);
+    color: var(--dp-selected-text);
+    border-color: var(--dp-selected-bg);
+    font-weight: 600;
+}
+
+.datepicker-portal .datepicker-day:disabled {
+    color: var(--dp-text-muted);
+    cursor: default;
+    opacity: 0.6;
+}
+
+.datepicker-portal .datepicker-day.today {
+    border-color: var(--dp-today-border);
+    font-weight: bold;
+    background-color: #e7f3ff;
+}
+
+.datepicker-portal .datepicker-day.today:hover {
+    background-color: var(--dp-hover-bg);
+}
+
+.datepicker-portal .datepicker-day.selected.today {
+    background-color: var(--dp-selected-bg);
+    color: var(--dp-selected-text);
+    box-shadow: inset 0 0 0 2px var(--dp-bg);
+}
+
+.datepicker-portal .datepicker-day.weekend:not(.selected) {
+    color: var(--dp-weekend-fg);
+}
+
+/* Стили для поля с ошибкой */
+.date-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+/* Новые стили для выравнивания колонок в режимах выбора месяца и года */
+.datepicker-portal .datepicker-panel[data-viewmode="months"] .datepicker-grid tbody,
+.datepicker-portal .datepicker-panel[data-viewmode="years"] .datepicker-grid tbody {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.datepicker-portal .datepicker-panel[data-viewmode="months"] .datepicker-grid tr,
+.datepicker-portal .datepicker-panel[data-viewmode="years"] .datepicker-grid tr {
+    display: contents; /* Позволяет дочерним td стать flex-элементами */
+}
+
+.datepicker-portal .datepicker-panel[data-viewmode="months"] .datepicker-grid td,
+.datepicker-portal .datepicker-panel[data-viewmode="years"] .datepicker-grid td {
+    flex-basis: 33.333%;
+    box-sizing: border-box;
+    padding: 2px;
+}

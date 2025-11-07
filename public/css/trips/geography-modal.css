@@ -1,0 +1,291 @@
+/* ===================================================================
+// Файл: public/css/trips/geography-modal.css (ФИНАЛЬНАЯ ИСПРАВЛЕННАЯ ВЕРСИЯ)
+// =================================================================== */
+
+.modal-body.geo-body {
+    padding: 25px;
+    background-color: #f8f9fa;
+}
+
+.geo-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.geo-chart-container,
+.geo-ranking-container {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+}
+
+.geo-chart-container {
+    height: 350px;
+}
+
+.geo-ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 310px;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-right: -10px;
+}
+
+.geo-ranking-list::-webkit-scrollbar {
+    width: 6px;
+}
+.geo-ranking-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.geo-ranking-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+.geo-ranking-list::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+
+.geo-ranking-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.geo-ranking-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+}
+
+.geo-position {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    margin-right: 15px;
+}
+
+.geo-ranking-item.pos-1 .geo-position { background-color: #ffc107; } /* Gold */
+.geo-ranking-item.pos-2 .geo-position { background-color: #adb5bd; } /* Silver */
+.geo-ranking-item.pos-3 .geo-position { background-color: #cd7f32; } /* Bronze */
+.geo-ranking-item:not(.pos-1):not(.pos-2):not(.pos-3) .geo-position { background-color: var(--primary); }
+
+.geo-city-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.geo-visits {
+    margin-left: auto;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary);
+    white-space: nowrap;
+}
+
+.geo-visits span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-left: 4px;
+}
+
+.geo-fact {
+    margin-top: 25px;
+    padding: 15px 20px;
+    background-color: #e9f3fe;
+    border-left: 4px solid var(--secondary);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--primary-dark);
+}
+.geo-fact i {
+    margin-right: 10px;
+    color: var(--secondary);
+}
+.geo-fact strong {
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .geo-layout {
+        grid-template-columns: 1fr;
+    }
+}
+/* Стили для фильтров в шапке (удалены старые стили для select) */
+#stats-modal .modal-header,
+#geography-modal .modal-header {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 20px;
+}
+
+.filter-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group-header label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+
+/* --- НАЧАЛО НОВЫХ СТИЛЕЙ: Кастомный выпадающий список --- */
+
+.custom-select-wrapper {
+    position: relative;
+    user-select: none;
+    width: 220px;
+}
+
+.custom-select {
+    position: relative;
+}
+
+.custom-select__trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary);
+    background-color: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.custom-select-wrapper:hover .custom-select__trigger {
+    border-color: var(--secondary);
+}
+
+.custom-select.open .custom-select__trigger {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.custom-select__trigger .arrow {
+    position: relative;
+    height: 10px;
+    width: 10px;
+}
+
+.custom-select__trigger .arrow::before,
+.custom-select__trigger .arrow::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    width: 2px;
+    height: 100%;
+    background-color: var(--text-light);
+    transition: all 0.2s ease;
+}
+
+.custom-select__trigger .arrow::before {
+    left: 1px;
+    transform: rotate(45deg);
+}
+
+.custom-select__trigger .arrow::after {
+    left: 6px;
+    transform: rotate(-45deg);
+}
+
+.custom-select.open .arrow::before {
+    transform: rotate(-45deg);
+}
+
+.custom-select.open .arrow::after {
+    transform: rotate(45deg);
+}
+
+.custom-options {
+    position: absolute;
+    display: block;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: white;
+    transition: all 0.2s;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-5px);
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.custom-select.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(5px);
+}
+
+.custom-option {
+    position: relative;
+    display: block;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+    list-style: none;
+}
+
+.custom-option:hover {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+.custom-option.selected {
+    background-color: var(--secondary);
+    color: white;
+    font-weight: 600;
+}
+
+/* Стилизация полосы прокрутки для кастомного списка */
+.custom-options::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.custom-options::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+.custom-options::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+/* --- КОНЕЦ НОВЫХ СТИЛЕЙ --- */

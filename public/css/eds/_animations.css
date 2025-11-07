@@ -1,0 +1,201 @@
+/* =================================================================== */
+/* ФАЙЛ: public/css/eds/_animations.css                              */
+/* ОПИСАНИЕ: Анимации, декоративные элементы и вспомогательные классы */
+/* =================================================================== */
+
+/* ==================== 14) ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ И АНИМАЦИИ ==================== */
+.table-sortable tbody,
+.table-sortable tbody tr {
+    transition: all 0.5s ease;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--gray);
+}
+
+.empty-state i {
+    margin-bottom: 24px;
+    font-size: 5rem;
+    color: var(--gray-light);
+}
+
+.empty-state h3 {
+    margin-bottom: 16px;
+    font-size: 1.8rem;
+    color: var(--dark);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Анимации появления элементов */
+.stat-card,
+.card,
+.employee-card {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+#ecpTable tbody tr {
+    opacity: 0;
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+#ecpTable tbody tr:nth-child(1) { animation-delay: 0.1s; }
+#ecpTable tbody tr:nth-child(2) { animation-delay: 0.15s; }
+#ecpTable tbody tr:nth-child(3) { animation-delay: 0.2s; }
+#ecpTable tbody tr:nth-child(4) { animation-delay: 0.25s; }
+#ecpTable tbody tr:nth-child(5) { animation-delay: 0.3s; }
+
+/* ==================== 15) ДЕКОРАТИВНЫЕ ФОНЫ И ПУЛЬСАЦИИ ==================== */
+.floating-bg {
+    position: fixed;
+    z-index: 0;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.7;
+    background: rgba(37, 99, 235, 0.08);
+    animation: float 25s infinite linear;
+}
+
+/* Позиционирование плавающих фонов */
+.floating-bg:nth-child(1) {
+    top: 5%;
+    left: 5%;
+    width: 400px;
+    height: 400px;
+    animation-duration: 30s;
+    background: rgba(10, 165, 233, 0.1);
+}
+
+.floating-bg:nth-child(2) {
+    top: 70%;
+    right: 5%;
+    width: 350px;
+    height: 350px;
+    animation-duration: 35s;
+    animation-direction: reverse;
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.floating-bg:nth-child(3) {
+    bottom: 10%;
+    left: 15%;
+    width: 300px;
+    height: 300px;
+    animation-duration: 40s;
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.floating-bg:nth-child(4) {
+    top: 30%;
+    right: 20%;
+    width: 450px;
+    height: 450px;
+    animation-duration: 45s;
+    animation-direction: reverse;
+    background: rgba(139, 92, 246, 0.06);
+}
+
+.floating-bg:nth-child(5) {
+    top: 60%;
+    left: 25%;
+    width: 350px;
+    height: 350px;
+    animation-duration: 50s;
+    background: rgba(236, 72, 153, 0.05);
+}
+
+.pulsating-dot {
+    position: fixed;
+    z-index: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.3);
+    animation: pulse 4s infinite ease-in-out;
+}
+
+/* Позиционирование пульсирующих точек */
+.pulsating-dot:nth-child(6) {
+    top: 15%;
+    right: 15%;
+    animation-delay: 0s;
+}
+
+.pulsating-dot:nth-child(7) {
+    top: 80%;
+    left: 10%;
+    animation-delay: 1s;
+}
+
+.pulsating-dot:nth-child(8) {
+    bottom: 20%;
+    right: 25%;
+    animation-delay: 2s;
+}
+
+.pulsating-dot:nth-child(9) {
+    top: 40%;
+    left: 8%;
+    animation-delay: 3s;
+}
+
+/* ==================== 17) КАДРЫ АНИМАЦИЙ (KEYFRAMES) ==================== */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translate(30px, 40px) rotate(90deg) scale(1.1);
+    }
+    50% {
+        transform: translate(0, 80px) rotate(180deg) scale(1);
+    }
+    75% {
+        transform: translate(-30px, 40px) rotate(270deg) scale(0.9);
+    }
+    100% {
+        transform: translate(0, 0) rotate(360deg) scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.6;
+    }
+}
