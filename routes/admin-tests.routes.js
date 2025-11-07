@@ -6,7 +6,7 @@
 // ===================================================================
 
 const express = require('express');
-const { handleValidationErrors, testCreationValidation, bulkDeleteValidation, reviewBatchValidation } = require('../middleware/validationMiddleware');
+const { handleValidationErrors, testCreationValidation, testSettingsValidation, bulkDeleteValidation, reviewBatchValidation } = require('../middleware/validationMiddleware');
 const { sendEvent } = require('../event-emitter'); // Импортируем функцию отправки событий
 
 module.exports = (knex) => {
@@ -84,7 +84,7 @@ module.exports = (knex) => {
         }
     });
     
-    router.post('/tests/:testId/settings', async (req, res, next) => {
+    router.post('/tests/:testId/settings', testSettingsValidation, handleValidationErrors, async (req, res, next) => {
         try {
             await testService.saveTestSettings(req.params.testId, req.body);
             sendEvent({}, 'tests-updated'); // Настройки (кол-во вопросов, время) тоже влияют на отображение

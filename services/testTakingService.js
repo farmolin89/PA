@@ -100,7 +100,15 @@ module.exports = (db) => {
 
         const total = userAnswers.length;
         const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
-        const passed = !hasPendingReview && (percentage >= settings.passing_score);
+
+        const questionsTarget = Math.max(1, settings.questions_per_test || total || 1);
+        const defaultPassingScore = Math.ceil(questionsTarget * 0.7);
+        const normalizedPassingScore = Math.max(
+            1,
+            Math.min(settings.passing_score || defaultPassingScore, questionsTarget)
+        );
+
+        const passed = !hasPendingReview && (score >= normalizedPassingScore);
 
         const resultData = {
             test_id: testId,
