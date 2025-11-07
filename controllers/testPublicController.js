@@ -18,10 +18,52 @@ exports.getPublicTests = (db) => async (req, res, next) => {
             return res.json(activeTests);
         }
 
-        const testsWithStatus = await Promise.all(activeTests.map(async (test) => {
-            const passedResult = await db('results').where({ test_id: test.id, fio: fio, passed: true }).first();
-            return { ...test, passedStatus: !!passedResult };
-        }));
+        const testIds = activeTests.map(test => test.id);
+        let resultsByTest = new Map();
+
+        if (testIds.length > 0) {
+            const userResults = await db('results')
+                .whereIn('test_id', testIds)
+                .andWhere({ fio })
+                .orderBy('date', 'desc');
+
+            resultsByTest = userResults.reduce((acc, result) => {
+                if (!acc.has(result.test_id)) {
+                    acc.set(result.test_id, result);
+                }
+                return acc;
+            }, new Map());
+        }
+
+        const testsWithStatus = activeTests.map(test => {
+            const lastResult = resultsByTest.get(test.id);
+
+            let status = 'not_started';
+            let passedStatus = false;
+            let normalizedResult = null;
+
+            if (lastResult) {
+                if (lastResult.status === 'pending_review') {
+                    status = 'pending';
+                } else if (lastResult.passed) {
+                    status = 'passed';
+                    passedStatus = true;
+                } else {
+                    status = 'failed';
+                }
+
+                normalizedResult = {
+                    score: lastResult.score,
+                    total: lastResult.total,
+                    percentage: lastResult.percentage,
+                    passed: lastResult.passed,
+                    status: lastResult.status,
+                    date: lastResult.date
+                };
+            }
+
+            return { ...test, status, passedStatus, lastResult: normalizedResult };
+        });
         res.json(testsWithStatus);
     } catch (error) {
         next(error);
