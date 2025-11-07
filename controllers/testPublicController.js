@@ -1,130 +1,138 @@
-// ===================================================================
-// Файл: controllers/testPublicController.js (ФИНАЛЬНАЯ ВЕРСИЯ С ГАРАНТИЕЙ СОХРАНЕНИЯ СЕССИИ)
-// ===================================================================
+const normalizeResult = (result) => {
+    if (!result) {
+        return null;
+    }
 
-/**
- * Получает список всех активных тестов для публичной части.
- */
+    return {
+        id: result.id,
+        score: result.score,
+        total: result.total,
+        percentage: result.percentage,
+        passed: Boolean(result.passed),
+        status: result.status,
+        date: result.date,
+    };
+};
+
+const resolveStatus = (result) => {
+    if (!result) {
+        return { status: 'not_started', passedStatus: false };
+    }
+
+    if (result.status === 'pending_review') {
+        return { status: 'pending', passedStatus: false };
+    }
+
+    if (result.passed) {
+        return { status: 'passed', passedStatus: true };
+    }
+
+    return { status: 'failed', passedStatus: false };
+};
+
 exports.getPublicTests = (db) => async (req, res, next) => {
     const { fio } = req.query;
+
     try {
-        const activeTests = await db('tests')
-            .join('test_settings', 'tests.id', '=', 'test_settings.test_id')
-            .select('tests.id', 'tests.name', 'test_settings.questions_per_test', 'test_settings.passing_score', 'test_settings.duration_minutes')
+        const tests = await db('tests')
+            .join('test_settings', 'tests.id', 'test_settings.test_id')
+            .select(
+                'tests.id',
+                'tests.name',
+                'test_settings.questions_per_test',
+                'test_settings.passing_score',
+                'test_settings.duration_minutes'
+            )
             .where('tests.is_active', true)
             .orderBy('tests.created_at', 'desc');
 
         if (!fio) {
-            return res.json(activeTests);
+            return res.json(tests);
         }
 
-        const testIds = activeTests.map(test => test.id);
-        let resultsByTest = new Map();
-
-        if (testIds.length > 0) {
-            const userResults = await db('results')
-                .whereIn('test_id', testIds)
-                .andWhere({ fio })
-                .orderBy('date', 'desc');
-
-            resultsByTest = userResults.reduce((acc, result) => {
-                if (!acc.has(result.test_id)) {
-                    acc.set(result.test_id, result);
-                }
-                return acc;
-            }, new Map());
+        const testIds = tests.map((test) => test.id);
+        if (testIds.length === 0) {
+            return res.json(tests);
         }
 
-        const testsWithStatus = activeTests.map(test => {
-            const lastResult = resultsByTest.get(test.id);
+        const rawResults = await db('results')
+            .whereIn('test_id', testIds)
+            .andWhere({ fio })
+            .orderBy('date', 'desc');
 
-            let status = 'not_started';
-            let passedStatus = false;
-            let normalizedResult = null;
-
-            if (lastResult) {
-                if (lastResult.status === 'pending_review') {
-                    status = 'pending';
-                } else if (lastResult.passed) {
-                    status = 'passed';
-                    passedStatus = true;
-                } else {
-                    status = 'failed';
-                }
-
-                normalizedResult = {
-                    score: lastResult.score,
-                    total: lastResult.total,
-                    percentage: lastResult.percentage,
-                    passed: lastResult.passed,
-                    status: lastResult.status,
-                    date: lastResult.date
-                };
+        const latestResultsByTest = new Map();
+        for (const result of rawResults) {
+            if (!latestResultsByTest.has(result.test_id)) {
+                latestResultsByTest.set(result.test_id, result);
             }
+        }
 
-            return { ...test, status, passedStatus, lastResult: normalizedResult };
+        const payload = tests.map((test) => {
+            const latestResult = latestResultsByTest.get(test.id);
+            const { status, passedStatus } = resolveStatus(latestResult);
+
+            return {
+                ...test,
+                status,
+                passedStatus,
+                lastResult: normalizeResult(latestResult),
+            };
         });
-        res.json(testsWithStatus);
+
+        return res.json(payload);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
-/**
- * Получает протокол последнего сданного теста для пользователя.
- */
 exports.getLastResultProtocol = (protocolService) => async (req, res, next) => {
     const { testId, fio } = req.query;
+
     try {
         const result = await protocolService.findLastPassedProtocol(testId, fio);
-        if (!result) return res.status(404).json({ message: 'Результат не найден.' });
-        res.json(result);
+        if (!result) {
+            return res.status(404).json({ message: 'Результат не найден.' });
+        }
+
+        return res.json(result);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
-/**
- * Начинает сессию теста, записывая время старта в сессию Express.
- */
 exports.startTestSession = () => (req, res, next) => {
     const { testId } = req.params;
+
     if (!req.session.testAttempts) {
         req.session.testAttempts = {};
     }
+
     req.session.testAttempts[testId] = { startTime: Date.now() };
-    
-    // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Принудительно сохраняем сессию перед отправкой ответа.
-    req.session.save((err) => {
-        if (err) {
-            console.error("Критическая ошибка сохранения сессии:", err);
-            return next(err);
+
+    req.session.save((error) => {
+        if (error) {
+            return next(error);
         }
-        // Ответ клиенту отправляется ТОЛЬКО ПОСЛЕ успешного сохранения.
-        res.status(200).json({ success: true });
+
+        return res.status(200).json({ success: true });
     });
 };
 
-/**
- * Получает вопросы и настройки для конкретного теста.
- */
 exports.getTestQuestions = (testTakingService) => async (req, res, next) => {
     const { testId } = req.params;
-    // Проверяем наличие сессии
+
     if (!req.session.testAttempts?.[testId]) {
         return res.status(403).json({ message: 'Сессия теста не была начата или истекла.' });
     }
+
     try {
         const testData = await testTakingService.getTestForPassing(testId);
-        res.json(testData);
+        return res.json(testData);
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
 
-/**
- * Принимает ответы, обрабатывает их и сохраняет результат.
- */
 exports.submitTest = (testTakingService) => async (req, res, next) => {
     const { testId } = req.params;
     const { fio, userAnswers } = req.body;
@@ -139,16 +147,19 @@ exports.submitTest = (testTakingService) => async (req, res, next) => {
             testId,
             fio,
             userAnswers,
-            startTime: sessionAttempt.startTime
+            startTime: sessionAttempt.startTime,
         });
-        
+
         delete req.session.testAttempts[testId];
-        
-        req.session.save((err) => {
-            if (err) console.error("Ошибка сохранения сессии после завершения теста:", err);
-            res.json(result);
+
+        req.session.save((error) => {
+            if (error) {
+                return next(error);
+            }
+
+            return res.json(result);
         });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
