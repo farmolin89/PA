@@ -70,18 +70,104 @@
             <div class="welcome-visual">
               <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                  <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2563eb" stop-opacity="0.8"/><stop offset="50%" stop-color="#7c3aed" stop-opacity="0.6"/><stop offset="100%" stop-color="#ec4899" stop-opacity="0.4"/></linearGradient>
-                  <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
-                  <linearGradient id="rotateGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="50%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#ec4899"/></linearGradient>
+                  <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb" stop-opacity="0.8"/>
+                    <stop offset="50%" stop-color="#7c3aed" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#ec4899" stop-opacity="0.4"/>
+                  </linearGradient>
+                  <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb"/>
+                    <stop offset="100%" stop-color="#7c3aed"/>
+                  </linearGradient>
+                  <linearGradient id="rotateGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2563eb"/>
+                    <stop offset="50%" stop-color="#7c3aed"/>
+                    <stop offset="100%" stop-color="#ec4899"/>
+                  </linearGradient>
                 </defs>
+
                 <circle cx="250" cy="250" r="200" fill="url(#mainGradient)" opacity="0.1"/>
+
                 <g transform="translate(250, 250)">
-                  <circle r="160" fill="none" stroke="url(#rotateGradient)" stroke-width="2" opacity="0.6" stroke-dasharray="8,8"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite"/></circle>
-                  <circle r="120" fill="none" stroke="url(#rotateGradient)" stroke-width="1.5" opacity="0.4" stroke-dasharray="6,6"><animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="15s" repeatCount="indefinite"/></circle>
+                  <circle r="160" fill="none" stroke="url(#rotateGradient)" stroke-width="2" opacity="0.6" stroke-dasharray="8,8">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle r="120" fill="none" stroke="url(#rotateGradient)" stroke-width="1.5" opacity="0.4" stroke-dasharray="6,6">
+                    <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="15s" repeatCount="indefinite"/>
+                  </circle>
                 </g>
+
                 <g transform="translate(250, 250)">
-                  <rect x="-50" y="-50" width="100" height="100" rx="15" fill="none" stroke="url(#accentGradient)" stroke-width="3" opacity="0.8"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/></rect>
-                  <circle r="40" fill="none" stroke="url(#accentGradient)" stroke-width="2" opacity="0.8"><animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="6s" repeatCount="indefinite"/></circle>
+                  <rect x="-50" y="-50" width="100" height="100" rx="15" fill="none" stroke="url(#accentGradient)" stroke-width="3" opacity="0.8">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+                  </rect>
+                  <circle r="40" fill="none" stroke="url(#accentGradient)" stroke-width="2" opacity="0.8">
+                    <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="6s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+
+                <g>
+                  <circle cx="150" cy="150" r="10" fill="#2563eb" opacity="0.7">
+                    <animate attributeName="cy" values="150;130;150;170;150" dur="4s" repeatCount="indefinite"/>
+                    <animate attributeName="cx" values="150;140;150;160;150" dur="5s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="10;8;10;12;10" dur="3s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="350" cy="350" r="8" fill="#7c3aed" opacity="0.7">
+                    <animate attributeName="cx" values="350;360;350;340;350" dur="5s" repeatCount="indefinite"/>
+                    <animate attributeName="cy" values="350;340;350;360;350" dur="4s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.7;0.9;0.7;0.5;0.7" dur="4s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="120" cy="300" r="7" fill="#ec4899" opacity="0.7">
+                    <animate attributeName="cy" values="300;280;300;320;300" dur="4.5s" repeatCount="indefinite"/>
+                    <animate attributeName="r" values="7;5;7;9;7" dur="3.5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="380" cy="180" r="9" fill="#2563eb" opacity="0.7">
+                    <animate attributeName="cx" values="380;370;380;390;380" dur="5.5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values="0.7;0.5;0.7;0.9;0.7" dur="4s" repeatCount="indefinite"/>
+                  </circle>
+
+                  <circle cx="200" cy="100" r="6" fill="#7c3aed" opacity="0.6">
+                    <animate attributeName="cy" values="100;90;100;110;100" dur="3s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="300" cy="100" r="5" fill="#ec4899" opacity="0.6">
+                    <animate attributeName="cx" values="300;310;300;290;300" dur="4s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="100" cy="200" r="7" fill="#2563eb" opacity="0.6">
+                    <animate attributeName="cy" values="200;190;200;210;200" dur="3.5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="400" cy="250" r="6" fill="#7c3aed" opacity="0.6">
+                    <animate attributeName="cx" values="400;390;400;410;400" dur="4.5s" repeatCount="indefinite"/>
+                  </circle>
+                </g>
+
+                <g>
+                  <line x1="200" y1="200" x2="150" y2="150" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite"/>
+                  </line>
+                  <line x1="300" y1="200" x2="350" y2="150" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                  </line>
+                  <line x1="200" y1="300" x2="150" y2="350" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="1s"/>
+                  </line>
+                  <line x1="300" y1="300" x2="350" y2="350" stroke="url(#accentGradient)" stroke-width="2" opacity="0.5" stroke-dasharray="4,4">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" begin="1.5s"/>
+                  </line>
+                </g>
+
+                <circle cx="250" cy="250" r="5" fill="#2563eb">
+                  <animate attributeName="r" values="5;10;5" dur="1.5s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="1;0.7;1" dur="1.5s" repeatCount="indefinite"/>
+                  <animate attributeName="fill" values="#2563eb;#7c3aed;#ec4899;#2563eb" dur="4s" repeatCount="indefinite"/>
+                </circle>
+
+                <g transform="translate(250, 250)">
+                  <polygon points="0,-80 20,-60 0,-40 -20,-60" fill="none" stroke="#7c3aed" stroke-width="2" opacity="0.6">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="12s" repeatCount="indefinite"/>
+                  </polygon>
+                  <polygon points="0,80 20,60 0,40 -20,60" fill="none" stroke="#ec4899" stroke-width="2" opacity="0.6">
+                    <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="10s" repeatCount="indefinite"/>
+                  </polygon>
                 </g>
               </svg>
             </div>
