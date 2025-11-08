@@ -56,10 +56,14 @@ module.exports = (db) => {
         const test = await db('tests').where({ id: testId }).first();
         if (!settings || !test) throw new Error('Тест или его настройки не найдены.');
 
+        const endTime = Date.now(); // Засекаем время окончания
         const timeLimit = settings.duration_minutes * 60 * 1000;
-        if (Date.now() > startTime + timeLimit + 5000) {
+        if (endTime > startTime + timeLimit + 5000) { // Проверяем с endTime
             throw new Error('Время на выполнение теста истекло.');
         }
+        
+        // === НОВОЕ: Вычисляем и добавляем время прохождения в секундах ===
+        const timeSpentSeconds = Math.round((endTime - startTime) / 1000);
 
         const questionIds = userAnswers.map(a => a.questionId);
         const questionsFromDb = await db('questions').whereIn('id', questionIds);
@@ -118,14 +122,13 @@ module.exports = (db) => {
             percentage,
             passed,
             status: hasPendingReview ? 'pending_review' : 'completed',
-            date: db.fn.now()
+            date: new Date(endTime).toISOString(), // Используем endTime для даты
+            time_spent: timeSpentSeconds, // <-- ВОТ ОНО, НОВОЕ ПОЛЕ!
         };
         
         const newResultId = await db.transaction(async (trx) => {
-            // === КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ 1.2: Убран .returning(), несовместимый с SQLite. ===
-            // Knex для SQLite возвращает массив с ID вставленной записи.
             const [insertedId] = await trx('results').insert(resultData);
-            const resultId = insertedId; // insertedId - это и есть наш ID
+            const resultId = insertedId; 
 
             if (answersToSave.length > 0) {
                 await trx('answers').insert(answersToSave.map(a => ({ ...a, result_id: resultId })));
