@@ -303,18 +303,117 @@ tbody tr.status-expired:hover { background-color: rgba(239, 68, 68, 0.2) !import
 .notification.deleted:before { content: "🗑️"; }
 .notification.exit { opacity: 0; transform: translateX(120%); }
 
-/* --- Модальное окно подтверждения (панель внизу) --- */
-.modal-overlay { display: none; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1001; background-color: var(--very-light-blue); padding: 16px 32px; box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08); border-top: 1px solid var(--border-color); }
-.modal-overlay.active { display: flex; justify-content: space-between; align-items: center; }
-.modal-overlay .modal-box { display: flex; align-items: center; gap: 20px; }
-#confirmModalTitle { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin: 0; }
-#confirmModalText { color: var(--text-light); margin: 0; }
-.modal-actions { display: flex; gap: 12px; }
-#confirmModalOkBtn { background-color: var(--error-color); color: var(--white); border: none; border-radius: 8px; padding: 8px 24px; cursor: pointer; transition: background-color 0.2s; }
-#confirmModalOkBtn:hover { background-color: #dc2626; }
-#confirmModalCancelBtn { background: transparent; color: var(--text-light); border: none; padding: 8px 16px; cursor: pointer; font-weight: 600; }
-#confirmModalCancelBtn:hover { color: var(--text-dark); }
-#confirmModalInputWrapper.hidden { display: none; }
+/* --- Универсальное модальное окно подтверждения --- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-color: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(3px);
+    z-index: 5000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.modal-overlay.hidden {
+    display: none !important;
+}
+
+.modal-overlay.visible,
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay .modal-box {
+    width: min(420px, 90vw);
+    background-color: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 24px 45px rgba(15, 23, 42, 0.25);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform: translateY(24px) scale(0.96);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.modal-overlay.visible .modal-box,
+.modal-overlay.active .modal-box {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+#confirmModalTitle {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+#confirmModalText {
+    margin: 0;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+#confirmModalInputWrapper {
+    width: 100%;
+}
+
+#confirmModalInputWrapper.hidden {
+    display: none;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+#confirmModalOkBtn {
+    background-color: var(--error-color);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.25);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+#confirmModalOkBtn:hover {
+    background-color: #dc2626;
+    box-shadow: 0 14px 28px rgba(220, 38, 38, 0.3);
+    transform: translateY(-1px);
+}
+
+#confirmModalCancelBtn {
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+#confirmModalCancelBtn:hover {
+    color: var(--text-dark);
+    border-color: var(--text-light);
+    transform: translateY(-1px);
+}
 
 /* --- Медиа-запросы для адаптивности --- */
 @media (max-width: 1400px) {
