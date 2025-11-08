@@ -61,11 +61,11 @@ async function onTestSelect(test) {
         showStartConfirmation(test);
     };
 
-    // Если у теста есть статус "сдан"
-    if (status === 'passed') {
+    // Если у теста есть статус "сдан" или "не сдан"
+    if (status === 'passed' || status === 'failed') {
         showConfirmModal({
-            title: 'Тест уже сдан',
-            text: `Вы уже успешно прошли тест "${testName}". Что вы хотите сделать?`,
+            title: 'Тест уже пройден',
+            text: `Вы уже проходили тест "${testName}". Что вы хотите сделать?`,
             onConfirm: startNewTest, // Действие для основной кнопки "Пройти заново"
             onCancel: async () => { // Действие для дополнительной кнопки "Посмотреть результат"
                 showTestRunnerView();

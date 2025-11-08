@@ -10,11 +10,10 @@ import { pluralize, escapeHTML } from '../utils/utils.js';
  * Создает HTML-элемент карточки теста для нового дизайна.
  * @param {object} test - Объект с данными теста от API.
  * @param {function} onSelectCallback - Функция, вызываемая при клике на карточку.
- * @returns {HTMLElement} - Готовый DOM-элемент <a>.
+ * @returns {HTMLElement} - Готовый DOM-элемент <div>.
  */
 function createTestCardElement(test, onSelectCallback) {
-    const testCard = document.createElement('a');
-    testCard.href = '#';
+    const testCard = document.createElement('div');
     testCard.className = 'test-card';
     testCard.dataset.id = test.id;
 
@@ -28,7 +27,6 @@ function createTestCardElement(test, onSelectCallback) {
     }
     
     const questionsCount = test.questions_per_test;
-    const passingScore = test.passing_score;
     const duration = test.duration_minutes;
 
     const statusClass = status === 'passed'
@@ -46,6 +44,16 @@ function createTestCardElement(test, onSelectCallback) {
             : status === 'pending'
                 ? 'Ожидает проверки'
                 : 'Не начат';
+    
+    const resultText = (status === 'passed' || status === 'failed')
+        ? `Правильно ответов: ${test.score || 0}/${test.total || 0}`
+        : '-';
+
+    function pluralizePoints(count) {
+        const cases = [2, 0, 1, 1, 1, 2];
+        const forms = ['балл', 'балла', 'баллов'];
+        return forms[(count % 100 > 4 && count % 100 < 20) ? 2 : cases[(count % 10 < 5) ? count % 10 : 5]];
+    }
 
     testCard.innerHTML = `
         <div class="test-card-title">${escapeHTML(test.name)}</div>
@@ -67,18 +75,16 @@ function createTestCardElement(test, onSelectCallback) {
               <span class="meta-text">${duration} ${pluralize(duration, 'minute')}</span>
             </div>
 
-            <div class="meta-item" title="Проходной балл">
-              <svg class="meta-icon icon-score" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            <div class="meta-item" title="Максимум баллов">
+              <svg class="meta-icon icon-score" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
               </svg>
-              <span class="meta-text">Нужно ${passingScore} из ${questionsCount} правильных ответов</span>
+              <span class="meta-text">${questionsCount} ${pluralizePoints(questionsCount)}</span>
             </div>
         </div>
         <div class="test-status">
             <div class="status-text ${statusClass}">${statusText}</div>
-            <!-- Этот блок можно будет заполнять в будущем, если API будет возвращать доп. инфо -->
-            <div class="correct-answers"></div>
+            <div class="correct-answers">${resultText}</div>
         </div>
     `;
     
