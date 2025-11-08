@@ -305,6 +305,8 @@ tbody tr.status-expired:hover { background-color: rgba(239, 68, 68, 0.2) !import
 
 /* --- Модальное окно подтверждения (панель внизу) --- */
 .modal-overlay { display: none; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1001; background-color: var(--very-light-blue); padding: 16px 32px; box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08); border-top: 1px solid var(--border-color); }
+.modal-overlay.hidden { display: none !important; }
+.modal-overlay.visible,
 .modal-overlay.active { display: flex; justify-content: space-between; align-items: center; }
 .modal-overlay .modal-box { display: flex; align-items: center; gap: 20px; }
 #confirmModalTitle { font-size: 1.1rem; font-weight: 600; color: var(--text-dark); margin: 0; }
