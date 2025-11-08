@@ -108,3 +108,22 @@ table.admin-table tbody tr:hover {
 #paginationContainer .btn {
     min-width: 44px; /* Для красивых круглых кнопок с одной цифрой */
 }
+
+/* --- НОВОЕ: Стили для ячейки с действиями --- */
+table.admin-table td.actions-cell {
+    text-align: center;
+}
+
+/* --- НОВОЕ: Стили для подсветки процентов --- */
+.percentage-cell {
+    font-weight: 700;
+}
+.percentage-cell.status-pass {
+    color: var(--success);
+}
+.percentage-cell.status-fail {
+    color: var(--danger);
+}
+.percentage-cell.status-pending {
+    color: var(--warning);
+}
