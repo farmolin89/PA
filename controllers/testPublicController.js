@@ -40,6 +40,8 @@ exports.getPublicTests = (db) => async (req, res, next) => {
 
             let status = 'not_started';
             let passedStatus = false;
+            let score = null;
+            let total = null;
 
             if (lastResult) {
                 if (lastResult.status === 'pending_review') {
@@ -50,9 +52,11 @@ exports.getPublicTests = (db) => async (req, res, next) => {
                 } else {
                     status = 'failed';
                 }
+                score = lastResult.score;
+                total = lastResult.total;
             }
 
-            return { ...test, status, passedStatus };
+            return { ...test, status, passedStatus, score, total };
         });
         res.json(testsWithStatus);
     } catch (error) {
@@ -61,18 +65,32 @@ exports.getPublicTests = (db) => async (req, res, next) => {
 };
 
 /**
- * Получает протокол последнего сданного теста для пользователя.
+ * Получает протокол последнего результата теста для пользователя.
  */
 exports.getLastResultProtocol = (protocolService) => async (req, res, next) => {
     const { testId, fio } = req.query;
     try {
-        const result = await protocolService.findLastPassedProtocol(testId, fio);
-        if (!result) return res.status(404).json({ message: 'Результат не найден.' });
-        res.json(result);
+        const lastResult = await protocolService.findLastResult(testId, fio);
+        if (!lastResult) return res.status(404).json({ message: 'Результат не найден.' });
+        
+        // Получаем от сервиса стандартный (вложенный) формат протокола
+        const protocolData = await protocolService.getProtocol(lastResult.id);
+
+        // =================================================================
+        // ИСПРАВЛЕНИЕ: Преобразуем вложенный объект в "плоский" специально 
+        // для публичной страницы, чтобы она работала корректно.
+        // =================================================================
+        const flatResponse = {
+            ...protocolData.summary,         // Копируем все поля из summary (score, total, passed и т.д.)
+            protocolData: protocolData.protocol, // Переименовываем ключ 'protocol' в 'protocolData'
+        };
+
+        res.json(flatResponse);
     } catch (error) {
         next(error);
     }
 };
+
 
 /**
  * Начинает сессию теста, записывая время старта в сессию Express.
@@ -84,13 +102,11 @@ exports.startTestSession = () => (req, res, next) => {
     }
     req.session.testAttempts[testId] = { startTime: Date.now() };
     
-    // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: Принудительно сохраняем сессию перед отправкой ответа.
     req.session.save((err) => {
         if (err) {
             console.error("Критическая ошибка сохранения сессии:", err);
             return next(err);
         }
-        // Ответ клиенту отправляется ТОЛЬКО ПОСЛЕ успешного сохранения.
         res.status(200).json({ success: true });
     });
 };
@@ -100,7 +116,6 @@ exports.startTestSession = () => (req, res, next) => {
  */
 exports.getTestQuestions = (testTakingService) => async (req, res, next) => {
     const { testId } = req.params;
-    // Проверяем наличие сессии
     if (!req.session.testAttempts?.[testId]) {
         return res.status(403).json({ message: 'Сессия теста не была начата или истекла.' });
     }
