@@ -16,12 +16,69 @@ const calculateLevel = (totalDays) => { if (typeof totalDays !== 'number' || isN
 const calculateTenure = (hireDateStr) => { if (!hireDateStr) return { value: 'Н/Д', unit: '' }; const diffDays = Math.ceil((new Date() - new Date(hireDateStr)) / (1000 * 60 * 60 * 24)); if (diffDays >= 365) { const years = (diffDays / 365.25); return { value: years.toFixed(1), unit: getPluralizedUnit(years, 'год', 'года', 'лет') }; } if (diffDays >= 30) { const months = Math.floor(diffDays / 30.44); return { value: months, unit: getPluralizedUnit(months, 'месяц', 'месяца', 'месяцев') }; } return { value: diffDays, unit: getPluralizedUnit(diffDays, 'день', 'дня', 'дней') }; };
 
 // --- Базовые CRUD-операции ---
+const normalizeNamePart = (value) => {
+    if (value === undefined || value === null) {
+        return null;
+    }
+    if (typeof value !== 'string') {
+        return value;
+    }
+    return value.trim();
+};
+
 const getAll = () => knex('employees').orderBy(['lastName', 'firstName']);
 const findById = (id) => knex('employees').where({ id }).first();
-const findByFio = (lastName, firstName, patronymic) => { /* ... (без изменений) ... */ };
-const findDuplicateByFio = (id, lastName, firstName, patronymic) => { /* ... (без изменений) ... */ };
-const create = async (employeeData) => { /* ... (без изменений) ... */ };
-const update = async (id, employeeData) => { /* ... (без изменений) ... */ };
+const findByFio = (lastName, firstName, patronymic) => {
+    return knex('employees')
+        .where({
+            lastName: normalizeNamePart(lastName),
+            firstName: normalizeNamePart(firstName),
+            patronymic: normalizeNamePart(patronymic)
+        })
+        .first();
+};
+const findDuplicateByFio = (id, lastName, firstName, patronymic) => {
+    return knex('employees')
+        .where({
+            lastName: normalizeNamePart(lastName),
+            firstName: normalizeNamePart(firstName),
+            patronymic: normalizeNamePart(patronymic)
+        })
+        .whereNot({ id })
+        .first();
+};
+const create = async (employeeData) => {
+    const dataToInsert = {
+        ...employeeData,
+        lastName: normalizeNamePart(employeeData.lastName),
+        firstName: normalizeNamePart(employeeData.firstName),
+        patronymic: normalizeNamePart(employeeData.patronymic)
+    };
+
+    const insertResult = await knex('employees').insert(dataToInsert);
+    const inserted = Array.isArray(insertResult) ? insertResult[0] : insertResult;
+    const newId = typeof inserted === 'object' ? inserted?.id : inserted;
+
+    if (newId === undefined || newId === null) {
+        return findByFio(dataToInsert.lastName, dataToInsert.firstName, dataToInsert.patronymic);
+    }
+
+    return findById(newId);
+};
+const update = async (id, employeeData) => {
+    const dataToUpdate = {
+        ...employeeData,
+        lastName: normalizeNamePart(employeeData.lastName),
+        firstName: normalizeNamePart(employeeData.firstName),
+        patronymic: normalizeNamePart(employeeData.patronymic)
+    };
+
+    const updatedRows = await knex('employees').where({ id }).update(dataToUpdate);
+    if (updatedRows === 0) {
+        return null;
+    }
+    return findById(id);
+};
 const deleteById = (id) => knex('employees').where({ id }).del();
 
 

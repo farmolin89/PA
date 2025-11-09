@@ -11,10 +11,13 @@ const { translateField } = require('./translation');
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        const formattedErrors = errors.array().map(err => ({
-            field: err.param,
-            message: `Поле '${translateField(err.param)}': ${err.msg}`
-        }));
+        const formattedErrors = errors.array().map(err => {
+            const fieldName = err.path || err.param;
+            return {
+                field: fieldName,
+                message: `Поле '${translateField(fieldName)}': ${err.msg}`
+            };
+        });
         // Возвращаем ошибку в виде объекта, чтобы ее мог перехватить
         // центральный обработчик ошибок в server.js
         const error = new Error('Ошибка валидации');
